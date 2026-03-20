@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cli-anything-libreoffice export:*)",
+      "Bash(cli-anything-libreoffice document:*)",
+      "Bash(cli-anything-libreoffice style:*)",
+      "Bash(cli-anything-libreoffice session:*)",
+      "Bash(python3 src/claude_skill/office_bridge.py)"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "ownerId": "office-skill-team",
+  "slug": "office",
+  "version": "0.1.0",
+  "publishedAt": 1742400000000,
+  "skills": [
+    {
+      "slug": "office",
+      "file": "01_OFFICE_SKILL.md",
+      "description": "Comprehensive office document processing tool"
+    },
+    {
+      "slug": "docx",
+      "file": "02_DOCX_SKILL.md",
+      "description": "Word document creation, editing, and analysis"
+    },
+    {
+      "slug": "xlsx",
+      "file": "03_XLSX_SKILL.md",
+      "description": "Excel spreadsheet creation, editing, and analysis"
+    },
+    {
+      "slug": "pptx",
+      "file": "04_PPTX_SKILL.md",
+      "description": "PowerPoint presentation creation, editing, and analysis"
+    }
+  ]
+}

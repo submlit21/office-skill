@@ -1,0 +1,162 @@
+{
+  "name": "office-skill",
+  "description": "An office processing tool built upon the CLI-Anything-generated cli-anything-libreoffice, which supports the creation, editing, modification, analysis, annotation, and execution of any other relevant tasks for Word, Excel, and PowerPoint documents.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Office Skill Team",
+  "keywords": [
+    "office",
+    "docx",
+    "xlsx",
+    "pptx",
+    "word",
+    "excel",
+    "powerpoint",
+    "libreoffice",
+    "cli-anything"
+  ],
+  "runtime": {
+    "type": "python",
+    "version": ">=3.8"
+  },
+  "dependencies": {
+    "cli-anything-libreoffice": ">=0.1.0",
+    "libreoffice": "system"
+  },
+  "skill": {
+    "handlers": {
+      "docx": {
+        "description": "Word document operations",
+        "commands": [
+          "create",
+          "edit",
+          "analyze",
+          "export",
+          "redline"
+        ]
+      },
+      "xlsx": {
+        "description": "Excel spreadsheet operations",
+        "commands": [
+          "create",
+          "edit",
+          "analyze",
+          "calculate",
+          "validate",
+          "export"
+        ]
+      },
+      "pptx": {
+        "description": "PowerPoint presentation operations",
+        "commands": [
+          "create",
+          "edit",
+          "analyze",
+          "export"
+        ]
+      }
+    },
+    "actions": [
+      {
+        "name": "create-document",
+        "description": "Create a new Word document",
+        "parameters": [
+          {
+            "name": "type",
+            "description": "Document type (docx)",
+            "required": true
+          },
+          {
+            "name": "output",
+            "description": "Output file path",
+            "required": true
+          },
+          {
+            "name": "template",
+            "description": "Template file path (optional)"
+          }
+        ]
+      },
+      {
+        "name": "edit-document",
+        "description": "Edit an existing document",
+        "parameters": [
+          {
+            "name": "input",
+            "description": "Input file path",
+            "required": true
+          },
+          {
+            "name": "output",
+            "description": "Output file path",
+            "required": true
+          },
+          {
+            "name": "operations",
+            "description": "JSON array of operations to perform"
+          }
+        ]
+      },
+      {
+        "name": "analyze-document",
+        "description": "Analyze document structure and content",
+        "parameters": [
+          {
+            "name": "input",
+            "description": "Input file path",
+            "required": true
+          },
+          {
+            "name": "type",
+            "description": "Document type (docx, xlsx, pptx)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "export-document",
+        "description": "Export document to another format",
+        "parameters": [
+          {
+            "name": "input",
+            "description": "Input file path",
+            "required": true
+          },
+          {
+            "name": "output",
+            "description": "Output file path",
+            "required": true
+          },
+          {
+            "name": "format",
+            "description": "Export format (pdf, html, etc.)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "validate-spreadsheet",
+        "description": "Validate Excel spreadsheet formulas",
+        "parameters": [
+          {
+            "name": "input",
+            "description": "Input spreadsheet path",
+            "required": true
+          },
+          {
+            "name": "timeout",
+            "description": "Validation timeout in seconds",
+            "default": 60
+          }
+        ]
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/office-skill"
+  },
+  "bugs": {
+    "url": "https://github.com/example/office-skill/issues"
+  }
+}

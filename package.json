@@ -1,0 +1,37 @@
+{
+  "name": "office-skill",
+  "version": "0.1.0",
+  "description": "Office document processing tool using cli-anything-libreoffice",
+  "main": "src/claude_skill/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "python -m pytest tests/",
+    "lint": "ruff check src/",
+    "format": "black src/",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "office",
+    "docx",
+    "xlsx",
+    "pptx",
+    "word",
+    "excel",
+    "powerpoint",
+    "claude-skill",
+    "cli-anything"
+  ],
+  "author": "Office Skill Team",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "claudeSkill": {
+    "skillConfig": "./src/claude_skill/skill.json"
+  }
+}

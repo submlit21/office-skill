@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/claude_skill/office_bridge.py
+src/office_skill/__init__.py
+src/office_skill/cli_wrapper.py
+src/office_skill/docx_handler.py
+src/office_skill/pptx_handler.py
+src/office_skill/xlsx_handler.py
+src/office_skill.egg-info/PKG-INFO
+src/office_skill.egg-info/SOURCES.txt
+src/office_skill.egg-info/dependency_links.txt
+src/office_skill.egg-info/requires.txt
+src/office_skill.egg-info/top_level.txt
+tests/test_basic.py
