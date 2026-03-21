@@ -185,20 +185,170 @@ def analyze_presentation(presentation_path):
     return analysis
 ```
 
+### Template Management for PowerPoint Presentations
+
+#### Template Naming Convention
+PowerPoint templates use the format: `domain.type.purpose.variant.version`
+
+**Examples:**
+- `business.presentation.investor_pitch.modern.v1` - Investor pitch deck
+- `education.presentation.training.comprehensive.v2` - Training presentation
+- `marketing.presentation.product_launch.creative.v1` - Product launch deck
+
+#### Adding PPTX Templates
+```python
+from office_skill import TemplateManager
+
+manager = TemplateManager()
+
+# Add a presentation template
+template_data = manager.add_template(
+    source_path="investor_pitch.pptx",
+    name="business.presentation.investor_pitch.modern.v1",
+    description="Modern investor pitch deck with startup focus",
+    tags=["business", "presentation", "pitch", "investor", "startup"]
+)
+
+print(f"Template added: {template_data['name']}")
+print(f"Slides: {template_data['analysis'].get('slides', 0)}")
+print(f"Layouts: {template_data['analysis'].get('layouts', 0)}")
+```
+
+#### Generating Presentations from Templates
+```python
+# Generate a pitch deck from template
+pitch_data = {
+    "company_name": "TechStart Inc",
+    "founding_year": "2023",
+    "industry": "SaaS",
+    "target_market": "Enterprise",
+    "funding_round": "Series A",
+    "funding_amount": "$5M",
+    "use_of_funds": "Product development, Market expansion",
+    "contact_email": "ceo@techstart.com"
+}
+
+result = manager.generate_from_template(
+    template_name="business.presentation.investor_pitch.modern.v1",
+    output_path="techstart_pitch_deck.pptx",
+    variables=pitch_data
+)
+
+print(f"Generated: {result['output_path']}")
+```
+
+#### Template Analysis for Presentations
+```python
+# Analyze a presentation for template suitability
+analysis = manager.analyze_document_structure("presentation.pptx")
+print(f"Document type: {analysis['type']}")
+print(f"Slides: {analysis['slides']}")
+print(f"Masters: {analysis['masters']}")
+print(f"Layouts: {analysis['layouts']}")
+
+# Check if suitable for template library
+if analysis['slides'] >= 5 and analysis['layouts'] >= 3:
+    print("Presentation suitable for template library")
+```
+
+#### Example: Investor Pitch Generation
+```python
+def generate_investor_pitch(company_details, output_path):
+    """Generate an investor pitch deck from template."""
+    from office_skill import TemplateManager
+    
+    manager = TemplateManager()
+    
+    pitch_variables = {
+        "company_name": company_details.get("name", "Company"),
+        "tagline": company_details.get("tagline", "Revolutionizing the industry"),
+        "founding_year": company_details.get("founding_year", "2023"),
+        "team_size": company_details.get("team_size", "10"),
+        "traction": company_details.get("traction", "$2M ARR"),
+        "market_size": company_details.get("market_size", "$50B TAM"),
+        "funding_ask": company_details.get("funding_ask", "$5M"),
+        "use_of_funds": company_details.get("use_of_funds", "Product & Market Expansion"),
+        "contact_info": company_details.get("contact", "contact@company.com")
+    }
+    
+    result = manager.generate_from_template(
+        template_name="business.presentation.investor_pitch.modern.v1",
+        output_path=output_path,
+        variables=pitch_variables
+    )
+    
+    print(f"Investor pitch deck generated: {output_path}")
+    print(f"Company: {company_details.get('name')}")
+    
+    return result
+```
+
 ### Template-Based Presentation Generation
 ```python
-def generate_from_template(template_path, data):
+def generate_from_template(template_name, data, output_path):
     """Generate presentation from template with dynamic content."""
-    ppt = PptxHandler(template_path)
+    from office_skill import TemplateManager
+    
+    manager = TemplateManager()
+    
+    result = manager.generate_from_template(
+        template_name=template_name,
+        output_path=output_path,
+        variables=data
+    )
+    
+    print(f"Generated {output_path} from template {template_name}")
+    print(f"Variables applied: {list(data.keys())}")
+    
+    return result
+```
 
-    # Replace placeholders on each slide
-    for slide_idx in range(len(ppt.list_slides().get("slides", []))):
-        # Get current content
-        # Replace placeholders with data
-        # Update slide
-        pass
+#### Training Presentation Generation
+```python
+def generate_training_presentation(course_name, modules, trainer, duration):
+    """Generate a training presentation from template."""
+    training_data = {
+        "course_title": course_name,
+        "trainer_name": trainer,
+        "course_duration": duration,
+        "module_count": str(len(modules)),
+        "modules_list": "\n".join([f"• {module}" for module in modules]),
+        "target_audience": "Employees, Managers",
+        "learning_objectives": "Understand key concepts, Apply skills, Achieve certification",
+        "contact_info": "training@company.com"
+    }
+    
+    output_file = f"{course_name.lower().replace(' ', '_')}_training.pptx"
+    
+    return generate_from_template(
+        template_name="education.presentation.training.comprehensive.v1",
+        data=training_data,
+        output_path=output_file
+    )
+```
 
-    return ppt
+#### Product Launch Deck Generation
+```python
+def generate_product_launch(product_details, launch_date, target_audience):
+    """Generate a product launch presentation."""
+    launch_data = {
+        "product_name": product_details.get("name", "New Product"),
+        "product_category": product_details.get("category", "Software"),
+        "key_features": "\n".join([f"• {feature}" for feature in product_details.get("features", [])]),
+        "unique_value": product_details.get("value_prop", "Industry-leading solution"),
+        "target_customers": target_audience,
+        "launch_date": launch_date,
+        "pricing_tier": product_details.get("pricing", "Contact for pricing"),
+        "next_steps": "Schedule demo, Request trial, Contact sales"
+    }
+    
+    output_file = f"{product_details.get('name', 'product').lower().replace(' ', '_')}_launch.pptx"
+    
+    return generate_from_template(
+        template_name="marketing.presentation.product_launch.creative.v1",
+        data=launch_data,
+        output_path=output_file
+    )
 ```
 
 ## Integration with cli-anything-libreoffice

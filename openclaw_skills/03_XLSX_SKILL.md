@@ -143,6 +143,106 @@ def analyze_and_report(data_path):
     return xls
 ```
 
+### Template Management for Excel Spreadsheets
+
+#### Template Naming Convention
+Excel templates use the format: `domain.type.purpose.variant.version`
+
+**Examples:**
+- `finance.model.three_statement.standard.v1` - Three-statement financial model
+- `business.budget.annual.comprehensive.v2` - Annual business budget
+- `sales.dashboard.quarterly.analytics.v1` - Sales performance dashboard
+
+#### Adding XLSX Templates
+```python
+from office_skill import TemplateManager
+
+manager = TemplateManager()
+
+# Add a financial model template
+template_data = manager.add_template(
+    source_path="financial_model.xlsx",
+    name="finance.model.three_statement.standard.v1",
+    description="Three-statement financial model with income statement, balance sheet, cash flow",
+    tags=["finance", "model", "accounting", "financial"]
+)
+
+print(f"Template added: {template_data['name']}")
+print(f"Sheets: {template_data['analysis'].get('sheets', 0)}")
+print(f"Formulas: {template_data['analysis'].get('formulas', 0)}")
+```
+
+#### Generating Spreadsheets from Templates
+```python
+# Generate a budget from template
+budget_data = {
+    "company_name": "Acme Inc",
+    "fiscal_year": "2026",
+    "department": "Marketing",
+    "currency": "USD",
+    "scenario": "Conservative"
+}
+
+result = manager.generate_from_template(
+    template_name="business.budget.annual.comprehensive.v1",
+    output_path="acme_marketing_budget_2026.xlsx",
+    variables=budget_data
+)
+
+print(f"Generated: {result['output_path']}")
+```
+
+#### Template Analysis for Excel
+```python
+# Analyze an Excel document for template suitability
+analysis = manager.analyze_document_structure("spreadsheet.xlsx")
+print(f"Document type: {analysis['type']}")
+print(f"Sheets: {analysis['sheets']}")
+print(f"Cells: {analysis['cells']}")
+print(f"Formulas: {analysis['formulas']}")
+
+# Check if suitable for template library
+if analysis['sheets'] > 0 and analysis['formulas'] > 10:
+    print("Spreadsheet suitable for template library")
+```
+
+#### Example: Financial Model Generation
+```python
+def generate_financial_model(company, year, scenario, output_path):
+    """Generate a financial model from template."""
+    from office_skill import TemplateManager
+    
+    manager = TemplateManager()
+    
+    model_data = {
+        "company_name": company,
+        "model_year": year,
+        "scenario_type": scenario,
+        "currency": "USD",
+        "units": "thousands",
+        "prepared_by": "Financial Analyst",
+        "as_of_date": "2026-03-20"
+    }
+    
+    result = manager.generate_from_template(
+        template_name="finance.model.three_statement.standard.v1",
+        output_path=output_path,
+        variables=model_data
+    )
+    
+    # Validate formulas after generation
+    from office_skill import XlsxHandler
+    xls = XlsxHandler(output_path)
+    validation = xls.validate_formulas()
+    
+    if validation.get("status") == "success":
+        print(f"Financial model generated with zero formula errors")
+    else:
+        print(f"Warning: Formula errors detected: {validation.get('errors', [])}")
+    
+    return result
+```
+
 ### Formula Validation
 ```python
 # Always validate after modifications
@@ -156,6 +256,33 @@ validation = xls.validate_formulas()
 if "errors" in validation and validation["errors"]:
     print(f"Formula errors found: {validation['errors']}")
     # Fix errors before proceeding
+```
+
+#### Budget Template Generation
+```python
+def generate_department_budget(department, year, manager_name):
+    """Generate a department budget from template."""
+    budget_vars = {
+        "department_name": department,
+        "fiscal_year": str(year),
+        "budget_manager": manager_name,
+        "currency": "USD",
+        "version": "1.0",
+        "prepared_date": "2026-03-20"
+    }
+    
+    output_file = f"{department.lower()}_budget_{year}.xlsx"
+    
+    result = manager.generate_from_template(
+        template_name="business.budget.department.comprehensive.v1",
+        output_path=output_file,
+        variables=budget_vars
+    )
+    
+    print(f"Budget template generated: {output_file}")
+    print(f"Variables: {list(budget_vars.keys())}")
+    
+    return result
 ```
 
 ## Integration with cli-anything-libreoffice

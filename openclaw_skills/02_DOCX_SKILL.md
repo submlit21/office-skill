@@ -95,18 +95,110 @@ pandoc --track-changes=all document.docx -o changes.md
 # Or implement with cli-anything-libreoffice session management
 ```
 
+### Template Management for Word Documents
+
+#### Template Naming Convention
+Word templates use the format: `domain.type.purpose.variant.version`
+
+**Examples:**
+- `business.report.quarterly.standard.v1` - Quarterly business report
+- `legal.contract.nda.comprehensive.v2` - Non-disclosure agreement
+- `education.syllabus.course.basic.v1` - Course syllabus template
+
+#### Adding DOCX Templates
+```python
+from office_skill import TemplateManager
+
+manager = TemplateManager()
+
+# Add a Word document template
+template_data = manager.add_template(
+    source_path="business_report.docx",
+    name="business.report.quarterly.standard.v1",
+    description="Standard quarterly business report template",
+    tags=["business", "report", "quarterly", "financial"]
+)
+
+print(f"Template added: {template_data['name']}")
+print(f"Analysis: {template_data['analysis']}")
+```
+
+#### Generating Documents from Templates
+```python
+# Generate a new report from template
+report_data = {
+    "company_name": "Acme Corporation",
+    "quarter": "Q4 2026",
+    "fiscal_year": "2026",
+    "prepared_by": "Jane Smith",
+    "approval_date": "March 20, 2026"
+}
+
+result = manager.generate_from_template(
+    template_name="business.report.quarterly.standard.v1",
+    output_path="acme_q4_report.docx",
+    variables=report_data
+)
+
+print(f"Generated: {result['output_path']}")
+```
+
+#### Template Analysis
+```python
+# Analyze a Word document for template suitability
+analysis = manager.analyze_document_structure("document.docx")
+print(f"Document type: {analysis['type']}")
+print(f"Pages: {analysis['pages']}")
+print(f"Paragraphs: {analysis['paragraphs']}")
+print(f"Tables: {analysis['tables']}")
+
+# Check if suitable for template library
+if analysis['pages'] > 0 and analysis['paragraphs'] > 5:
+    print("Document suitable for template library")
+```
+
 ### Template-Based Document Generation
 ```python
-def generate_report(template_path, data):
+def generate_report(template_name, data, output_path):
     """Generate document from template with data."""
-    doc = DocxHandler(template_path)
+    from office_skill import TemplateManager
+    
+    manager = TemplateManager()
+    
+    # Generate from template
+    result = manager.generate_from_template(
+        template_name=template_name,
+        output_path=output_path,
+        variables=data
+    )
+    
+    # Log generation details
+    print(f"Generated {output_path} from template {template_name}")
+    print(f"Variables applied: {list(data.keys())}")
+    
+    return result
+```
 
-    # Replace placeholders
-    for placeholder, value in data.items():
-        # Find and replace logic
-        pass
-
-    return doc
+#### Example: Business Letter Generation
+```python
+def generate_business_letter(recipient, position, company, address, date):
+    """Generate a formal business letter."""
+    letter_data = {
+        "recipient_name": recipient,
+        "recipient_position": position,
+        "recipient_company": company,
+        "recipient_address": address,
+        "letter_date": date,
+        "sender_name": "John Doe",
+        "sender_position": "Director of Operations",
+        "sender_company": "Acme Inc"
+    }
+    
+    return generate_report(
+        template_name="business.letter.formal.standard.v1",
+        data=letter_data,
+        output_path=f"letter_to_{recipient.replace(' ', '_')}.docx"
+    )
 ```
 
 ### Document Analysis

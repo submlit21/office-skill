@@ -68,6 +68,49 @@ claude office analyze-document --input data.xlsx --type xlsx
 claude office export-document --input presentation.pptx --output slides.pdf --format pdf
 ```
 
+### Template Management
+```python
+from office_skill import TemplateManager
+
+# Create template manager
+manager = TemplateManager()
+
+# Add a new template
+manager.add_template(
+    source_path="report.docx",
+    name="business.report.quarterly.standard.v1",
+    description="Quarterly business report template",
+    tags=["business", "report", "quarterly"]
+)
+
+# List templates
+templates = manager.list_templates(type="report")
+for template in templates:
+    print(f"{template['name']}: {template['description']}")
+
+# Generate document from template
+manager.generate_from_template(
+    template_name="business.report.quarterly.standard.v1",
+    output_path="q4_report.docx",
+    variables={"company_name": "Acme Inc", "quarter": "Q4 2023"}
+)
+```
+
+### CLI Template Commands
+```bash
+# Add template
+office_cli.py template add --input report.docx --name business.report.quarterly.standard.v1
+
+# List templates
+office_cli.py template list --type report --verbose
+
+# Search templates
+office_cli.py template search --query "business"
+
+# Generate from template
+office_cli.py template generate --template business.report.quarterly.standard.v1 --output new_report.docx
+```
+
 ## Project Structure
 
 ```
@@ -78,10 +121,16 @@ office-skill/
 │   │   ├── cli_wrapper.py     # CLI interface
 │   │   ├── docx_handler.py    # Word operations
 │   │   ├── xlsx_handler.py    # Excel operations
-│   │   └── pptx_handler.py    # PowerPoint operations
+│   │   ├── pptx_handler.py    # PowerPoint operations
+│   │   └── template_handler.py # Template management
 │   └── claude_skill/          # Claude Skill adapter
 │       ├── index.js
 │       └── skill.json
+├── templates/                 # Template storage (hierarchical)
+│   └── [domain]/[type]/[purpose]/[variant]/[version]/
+│       ├── template.md        # Markdown conversion
+│       ├── metadata.json      # Template metadata
+│       └── original.*         # Original document copy
 ├── openclaw_skills/           # OpenClaw skill definitions
 │   ├── 01_OFFICE_SKILL.md
 │   ├── 02_DOCX_SKILL.md

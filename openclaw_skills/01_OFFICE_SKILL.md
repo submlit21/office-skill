@@ -76,6 +76,12 @@ ppt.set_content(0, title="Welcome", content="First slide content")
 - **XlsxHandler**: Excel operations with formula preservation and validation
 - **PptxHandler**: PowerPoint operations with slide deck management
 
+### Template Management System
+- **Hierarchical Storage**: Templates organized by `domain.type.purpose.variant.version`
+- **Markdown Conversion**: Office documents converted to markdown for analysis
+- **Template Library**: Central repository for reusable document patterns
+- **Variable Substitution**: Generate documents with dynamic content
+
 ### Integration Points
 - **OpenClaw**: Use as standalone skill with markdown documentation
 - **Claude Skill**: Package as Claude Code skill with skill.json
@@ -87,6 +93,8 @@ ppt.set_content(0, title="Welcome", content="First slide content")
 2. **Preserve document integrity**: Use proper session management to avoid corruption.
 3. **Leverage real LibreOffice backend**: Don't reimplement rendering; use the actual software.
 4. **Support tracked changes properly**: For DOCX redlining, only mark changed text and preserve original RSIDs.
+5. **Follow template naming conventions**: Use `domain.type.purpose.variant.version` format for all templates.
+6. **Maintain template consistency**: Ensure templates follow established patterns and standards.
 
 ## Examples
 

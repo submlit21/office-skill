@@ -13,10 +13,12 @@ from .cli_wrapper import LibreOfficeCLI
 from .docx_handler import DocxHandler
 from .xlsx_handler import XlsxHandler
 from .pptx_handler import PptxHandler
+from .template_handler import TemplateManager
 
 __all__ = [
     "LibreOfficeCLI",
     "DocxHandler",
     "XlsxHandler",
     "PptxHandler",
+    "TemplateManager",
 ]
