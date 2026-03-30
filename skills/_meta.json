@@ -1,0 +1,33 @@
+{
+  "ownerId": "office-skill-team",
+  "slug": "office",
+  "version": "0.1.0",
+  "publishedAt": 1742400000000,
+  "skills": [
+    {
+      "slug": "office",
+      "file": "01_OFFICE_SKILL.md",
+      "description": "Comprehensive office document processing with template management"
+    },
+    {
+      "slug": "docx",
+      "file": "02_DOCX_SKILL.md",
+      "description": "Word document creation, editing, analysis, and template workflows"
+    },
+    {
+      "slug": "xlsx",
+      "file": "03_XLSX_SKILL.md",
+      "description": "Excel spreadsheet creation, editing, analysis, and financial templates"
+    },
+    {
+      "slug": "pptx",
+      "file": "04_PPTX_SKILL.md",
+      "description": "PowerPoint presentation creation, editing, analysis, and presentation templates"
+    },
+    {
+      "slug": "template",
+      "file": "05_TEMPLATE_SKILL.md",
+      "description": "Document template management, storage, search, and generation with hierarchical organization"
+    }
+  ]
+}
