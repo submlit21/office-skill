@@ -8,7 +8,7 @@ and extract metadata for template cataloging.
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 from office_main.core.cli_wrapper import LibreOfficeCLI
 
@@ -34,7 +34,7 @@ class TemplateAnalyzer:
 
         # Create temporary output file
         with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as tmp:
-            output_path = tmp.name
+            output_path: Union[str, Path] = tmp.name
 
         actual_output = None
         try:
@@ -341,7 +341,7 @@ class TemplateAnalyzer:
             slide_count = len(slides)
 
             # Count layouts and check for notes
-            layouts = {}
+            layouts: Dict[str, int] = {}
             has_notes = False
             for slide in slides:
                 if isinstance(slide, dict):

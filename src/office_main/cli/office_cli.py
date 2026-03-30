@@ -20,9 +20,9 @@ try:
         DocxHandler,
         LibreOfficeCLI,
         PptxHandler,
-        TemplateManager,
         XlsxHandler,
     )
+    from office_main.core.template_handler import TemplateManager
 except ImportError:
     print("Error: office_main package not found. Install with: pip install -e .")
     sys.exit(1)

@@ -41,7 +41,8 @@ Issues = "https://github.com/example/office-skill/issues"
 where = ["src"]
 
 [tool.setuptools.package-data]
-office_skill = ["py.typed"]
+office_main = ["py.typed"]
+template_manager = ["py.typed"]
 
 [tool.black]
 line-length = 100
@@ -73,3 +74,13 @@ addopts = [
     "--strict-config",
     "--tb=short",
 ]
+
+[tool.mypy]
+python_version = "3.9"
+show_error_codes = true
+strict = false
+exclude = [
+    "tests",
+]
+ignore_missing_imports = true
+
