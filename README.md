@@ -14,11 +14,6 @@ Office document processing tool using `cli-anything-libreoffice` backend.
 
 ## Installation
 
-### From PyPI (when available)
-```bash
-pip install office-skill
-```
-
 ### From source (development)
 ```bash
 # Clone repository
