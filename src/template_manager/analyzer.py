@@ -36,7 +36,11 @@ class TemplateAnalyzer:
         with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as tmp:
             output_path: Union[str, Path] = tmp.name
 
+        temp_cli = None
+        session_file = None
         actual_output = None
+        text_output = Path(output_path).with_suffix(".txt")
+
         try:
             # First try: Use cli-anything-libreoffice export to text, then convert to markdown
             try:
@@ -45,50 +49,31 @@ class TemplateAnalyzer:
                 session_file = temp_cli.start_session(str(source_path))
                 cli_with_session = LibreOfficeCLI(project_path=session_file)
 
-                # Export as text (document is already loaded via project file)
-                text_output = Path(output_path).with_suffix(".txt")
-                try:
-                    cli_with_session.export(
-                        "render", positional=[str(text_output)], preset="text", overwrite=True
-                    )
+                cli_with_session.export(
+                    "render", positional=[str(text_output)], preset="text", overwrite=True
+                )
 
-                    # Read text output and convert to simple markdown
-                    if text_output.exists():
-                        with open(text_output, "r", encoding="utf-8") as f:
-                            text_content = f.read()
+                # Read text output and convert to simple markdown
+                if text_output.exists():
+                    with open(text_output, "r", encoding="utf-8") as f:
+                        text_content = f.read()
 
-                        # Check if content is meaningful (not empty or just whitespace)
-                        if text_content.strip() and len(text_content.strip()) > 10:
-                            # Convert to basic markdown
-                            # Add title, preserve paragraphs
-                            lines = text_content.split("\n")
-                            markdown_lines = []
-                            for line in lines:
-                                if line.strip():
-                                    markdown_lines.append(line)
-                                else:
-                                    markdown_lines.append("")
+                    # Check if content is meaningful (not empty or just whitespace)
+                    if text_content.strip() and len(text_content.strip()) > 10:
+                        # Convert to basic markdown
+                        # Add title, preserve paragraphs
+                        lines = text_content.split("\n")
+                        markdown_lines = []
+                        for line in lines:
+                            if line.strip():
+                                markdown_lines.append(line)
+                            else:
+                                markdown_lines.append("")
 
-                            markdown_content = f"# {source_path.name}\n\n" + "\n".join(
-                                markdown_lines
-                            )
+                        markdown_content = f"# {source_path.name}\n\n" + "\n".join(markdown_lines)
 
-                            # Clean up
-                            if text_output.exists():
-                                text_output.unlink()
-                            temp_cli.end_session()
+                        return markdown_content
 
-                            return markdown_content
-                        else:
-                            # Content too short, fall back to other methods
-                            if text_output.exists():
-                                text_output.unlink()
-                except Exception:
-                    # Export failed, try fallback methods
-                    pass
-
-                # Clean up
-                temp_cli.end_session()
             except Exception:
                 # CLI-based conversion failed, fall back to original methods
                 pass
@@ -158,7 +143,8 @@ class TemplateAnalyzer:
 
             if converted:
                 # Read the converted markdown
-                with open(output_path, "r", encoding="utf-8") as f:
+                output_path_obj = Path(output_path)
+                with open(output_path_obj, "r", encoding="utf-8") as f:
                     markdown_content = f.read()
             else:
                 # Conversion failed
@@ -174,6 +160,29 @@ class TemplateAnalyzer:
                 f"# {source_path.name}\n\nConversion failed, no markdown preview available."
             )
             return markdown_content
+        finally:
+            # Always clean up temporary files
+            # Clean up text output
+            if text_output.exists():
+                text_output.unlink()
+            # Clean up primary temp file
+            temp_output_path = Path(output_path) if isinstance(output_path, str) else output_path
+            if temp_output_path.exists():
+                temp_output_path.unlink()
+            # Clean up libreoffice-generated file if different
+            if (
+                actual_output is not None
+                and actual_output.exists()
+                and actual_output != temp_output_path
+            ):
+                actual_output.unlink()
+            # Always end session if it was created
+            if temp_cli is not None and session_file is not None:
+                try:
+                    temp_cli.end_session()
+                except Exception:
+                    # Ignore cleanup errors to not mask the actual result
+                    pass
 
     def analyze_document_structure(self, source_path: Path) -> Dict[str, Any]:
         """Analyze document structure for template metadata."""
