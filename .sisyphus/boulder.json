@@ -1,0 +1,44 @@
+{
+  "active_plan": "/home/hs/workspace/opencode/office-skill/.sisyphus/plans/init-deep.md",
+  "started_at": "2026-04-01T10:59:13.570Z",
+  "session_ids": [
+    "ses_2b8077c9affeEzrvRFO6o91Rzw",
+    "ses_2b74bd2acfferY8F7JzxzDIuvi",
+    "ses_2b7481c69ffeAp3Jl68odMPGr5",
+    "ses_2b7458c68ffeOU7U7tL54mGOjk",
+    "ses_2b734a07fffeqvbm1nackMvLTT",
+    "ses_2b72eab9bffeRy2b24O987lpcB",
+    "ses_2b72e1b33ffeeyiYckGmyUDro3"
+  ],
+  "plan_name": "init-deep",
+  "agent": "atlas",
+  "task_sessions": {
+    "final-wave:f1": {
+      "task_key": "final-wave:f1",
+      "task_label": "F1",
+      "task_title": "**Validate All Files** — `unspecified-low`",
+      "session_id": "ses_2b74bd2acfferY8F7JzxzDIuvi",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-low",
+      "updated_at": "2026-04-01T11:03:24.391Z"
+    },
+    "final-wave:f2": {
+      "task_key": "final-wave:f2",
+      "task_label": "F2",
+      "task_title": "**Deduplicate Content** — `unspecified-low`",
+      "session_id": "ses_2b7481c69ffeAp3Jl68odMPGr5",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-low",
+      "updated_at": "2026-04-01T11:06:03.567Z"
+    },
+    "final-wave:f3": {
+      "task_key": "final-wave:f3",
+      "task_label": "F3",
+      "task_title": "**Final Quality Audit** — `quick`",
+      "session_id": "ses_2b7458c68ffeOU7U7tL54mGOjk",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-01T11:09:14.544Z"
+    }
+  }
+}

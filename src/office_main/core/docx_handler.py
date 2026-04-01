@@ -230,13 +230,15 @@ class DocxHandler:
         """
         content = self.list_content()
         # Add additional analysis logic here
+        if isinstance(content, list):
+            items = content
+        else:
+            items = content.get("items", [])
         return {
             "document": str(self.document_path),
             "content_summary": content,
-            "has_tables": any("table" in str(item).lower() for item in content.get("items", [])),
-            "has_headings": any(
-                "heading" in str(item).lower() for item in content.get("items", [])
-            ),
+            "has_tables": any("table" in str(item).lower() for item in items),
+            "has_headings": any("heading" in str(item).lower() for item in items),
         }
 
     def close(self):
