@@ -34,4 +34,4 @@ build/
 *.egg-info/
 
 # Test outputs
-tests/output/
+tests/
