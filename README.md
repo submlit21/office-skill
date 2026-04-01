@@ -27,3 +27,7 @@ pip install -e .
 
 ### Optional dependencies for enhanced functionality
 - `pandoc` - Better DOCX to Markdown conversion (optional, system package)
+
+## Agent Integration
+
+To use this skill with AI agents, place the entire `office-skill` directory in the agent's `skills/` directory as configured by your agent system.
