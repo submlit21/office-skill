@@ -1,4 +1,4 @@
-# Office Skill
+# openclaw Office Skill
 
 Office document processing tool using `cli-anything-libreoffice` backend.
 
