@@ -851,7 +851,7 @@ Max Concurrent: 5 (Wave 1)
   - Files: various (determined by ruff)
   - Pre-commit: `ruff check src/`
 
-- [ ] 10. Apply Black formatting
+- [x] 10. Apply Black formatting
 
   **What to do**:
   - Run `black src/` to format all Python files

@@ -1,0 +1,6 @@
+$ python3 -c "from office_main.core import DocxHandler, XlsxHandler, PptxHandler; print('Imports OK'); from template_manager.analyzer import TemplateAnalyzer; from template_manager.generator import TemplateGenerator; print('All imports OK')"
+
+Imports OK
+All imports OK
+
+Result: PASS ✅ - All core and template_manager imports work correctly after formatting.

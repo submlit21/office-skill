@@ -1,0 +1,5 @@
+$ black src/ --check
+All done! ✨ 🍰 ✨
+14 files would be left unchanged.
+
+Result: PASS ✅ - All 14 Python files in src/ are already formatted correctly.

@@ -126,3 +126,11 @@
 - **Import verification**: `from office_main.core import DocxHandler, XlsxHandler, PptxHandler` → Imports OK ✅
 - **Key insight**: The UP rules (pyupgrade) did the heavy lifting — `Dict[X]` → `dict[X]`, `List[X]` → `list[X]`, `Optional[X]` → `X | None`, `Union[X, Y]` → `X | Y`, removed deprecated `open()` mode arguments (`"r"`), and cleaned up unused typing imports. These auto-fixes modernized all type annotations to Python 3.10+ syntax across 7+ files. The remaining violations were SIM/PLC rules requiring structural changes that ruff flags but doesn't auto-fix — these are straightforward manual fixes.
 - **Note about ruff config deprecation**: Ruff warns that top-level linter settings (`ignore`, `select`) are deprecated in favor of `lint.ignore`, `lint.select`. Should be updated in a future pass.
+
+## 2026-04-30: Black formatting check — all 14 files already compliant
+
+- **Action**: Ran `black src/` — all 14 files already formatted correctly (no changes needed)
+- **Verification**:
+  - `black src/ --check` → "All done! 14 files would be left unchanged." ✅
+  - `python3 -c "from office_main.core import DocxHandler, XlsxHandler, PptxHandler; from template_manager.analyzer import TemplateAnalyzer; from template_manager.generator import TemplateGenerator; print('All imports OK')"` → All imports OK ✅
+- **Key insight**: Previous optimization passes (ruff auto-fixes, base handler extraction, CLI wrapper consolidation) already kept files Black-formatted. No drift occurred between passes. Evidence saved to `.sisyphus/evidence/task-10-*.txt`.
