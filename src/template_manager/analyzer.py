@@ -5,12 +5,15 @@ This module provides functionality to analyze document structure
 and extract metadata for template cataloging.
 """
 
+from __future__ import annotations
+
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, Union
+from typing import TYPE_CHECKING, Any, Dict, Union
 
-from office_main.core.cli_wrapper import LibreOfficeCLI
+if TYPE_CHECKING:
+    from office_main.core.cli_wrapper import LibreOfficeCLI
 
 
 class TemplateAnalyzer:

@@ -8,14 +8,17 @@ For Word documents, it leverages cli-anything-libreoffice to actually
 update content placeholders in the document.
 """
 
+from __future__ import annotations
+
 import shutil
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 import jinja2
 from jinja2 import Template
 
-from office_main.core.cli_wrapper import LibreOfficeCLI
+if TYPE_CHECKING:
+    from office_main.core.cli_wrapper import LibreOfficeCLI
 
 from .storage import TemplateStorage
 

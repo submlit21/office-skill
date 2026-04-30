@@ -704,7 +704,7 @@ Max Concurrent: 5 (Wave 1)
   - Files: `src/office_main/core/cli_wrapper.py`
   - Pre-commit: None
 
-- [ ] 8. Fix cross-package dependency with TYPE_CHECKING
+- [x] 8. Fix cross-package dependency with TYPE_CHECKING
 
   **What to do**:
   - In `src/template_manager/analyzer.py`: wrap import of `office_main.core.cli_wrapper` with `TYPE_CHECKING` guard

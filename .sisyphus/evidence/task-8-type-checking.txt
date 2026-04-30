@@ -1,0 +1,22 @@
+Task 8: TYPE_CHECKING guard in template_manager/generator.py
+============================================================
+
+Change made:
+  - Added `from __future__ import annotations` (line 11)
+  - Added `TYPE_CHECKING` to typing import (line 15)
+  - Wrapped `from office_main.core.cli_wrapper import LibreOfficeCLI` with `if TYPE_CHECKING:` (lines 20-21)
+
+Reasoning:
+  - LibreOfficeCLI is only used as a type annotation in __init__ (dependency injection pattern)
+  - No runtime instantiation of LibreOfficeCLI exists in this file
+  - `from __future__ import annotations` ensures the type hint is stored as a string
+  - TYPE_CHECKING guard provides the class definition for static type checkers (mypy, pyright)
+  - Clean, straightforward case for TYPE_CHECKING pattern
+
+Verification:
+  - python3 -c "from template_manager.generator import TemplateGenerator; print('Generator import OK')" → PASS
+  - python3 -m py_compile src/template_manager/generator.py → syntax OK
+
+Summary of both files:
+  - analyzer.py: Wrapped + `from __future__ import annotations` (needed due to runtime instantiation)
+  - generator.py: Wrapped + `from __future__ import annotations` (clean type-only usage)

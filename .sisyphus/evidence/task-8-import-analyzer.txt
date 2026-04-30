@@ -1,0 +1,20 @@
+Task 8: TYPE_CHECKING guard in template_manager/analyzer.py
+===========================================================
+
+Change made:
+  - Added `from __future__ import annotations` (line 8)
+  - Added `TYPE_CHECKING` to typing import (line 13)
+  - Wrapped `from office_main.core.cli_wrapper import LibreOfficeCLI` with `if TYPE_CHECKING:` (lines 15-16)
+
+Reasoning:
+  - LibreOfficeCLI is used as a type annotation in __init__ AND for runtime instantiation
+  - `from __future__ import annotations` makes annotations lazy strings (PEP 563)
+  - Without it, the class body would fail at import since LibreOfficeCLI wouldn't be defined
+  - Note: runtime instantiation calls (e.g., temp_cli = LibreOfficeCLI()) still need LibreOfficeCLI
+    at runtime. These calls will NOT work with only a TYPE_CHECKING guard.
+  - This change only prevents the module-level import from creating a cross-package runtime dependency.
+    The actual runtime usage of LibreOfficeCLI inside methods is unaffected at import time.
+
+Verification:
+  - python3 -c "from template_manager.analyzer import TemplateAnalyzer; print('Analyzer import OK')" → PASS
+  - python3 -m py_compile src/template_manager/analyzer.py → syntax OK

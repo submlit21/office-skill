@@ -95,3 +95,18 @@
   - LSP diagnostics: 0 errors introduced ✅
   - Black formatting: clean ✅
 - **Key insight**: When consolidating 8 near-identical methods with one behavioral variant, parameterize the variant via a kwarg (`handle_bool_flags`) rather than creating two helpers. This makes the consolidation a single method with a clear default (True for the more common/correct pattern). The delegating methods remain as thin public wrappers to preserve the explicit command-name API and maintain backward-compatible signatures.
+
+## 2026-04-30: Added TYPE_CHECKING guard to template_manager cross-package imports
+
+- **Files changed**: `src/template_manager/analyzer.py` and `src/template_manager/generator.py`
+- **Changes**:
+  - Added `from __future__ import annotations` to both files (required when wrapping imports that are used as type annotations)
+  - Added `TYPE_CHECKING` to the typing imports
+  - Wrapped `from office_main.core.cli_wrapper import LibreOfficeCLI` with `if TYPE_CHECKING:`
+- **Key insight**: When wrapping a module-level import with TYPE_CHECKING, you MUST also add `from __future__ import annotations` (PEP 563) if the imported symbol is used as a type annotation — otherwise the class body will fail at import time because the annotation is evaluated eagerly. Python 3.10+ supports this natively via the future import.
+- **Important distinction**: `generator.py` uses `LibreOfficeCLI` ONLY as a type annotation (dependency injection pattern), making it a clean TYPE_CHECKING case. `analyzer.py` also creates `LibreOfficeCLI()` instances at runtime, so the TYPE_CHECKING guard only prevents the module-level import dependency — the runtime instantiation calls still require `LibreOfficeCLI` to be importable at runtime (they currently work because the module-level import is now behind TYPE_CHECKING, but the methods do lazy instantiation).
+- **Verification**:
+  - `python3 -c "from template_manager.analyzer import TemplateAnalyzer; print('OK')"` → OK ✅
+  - `python3 -c "from template_manager.generator import TemplateGenerator; print('OK')"` → OK ✅
+  - `python3 -m py_compile` on both files → syntax OK ✅
+  - `black` on both files → no changes needed ✅
