@@ -1,0 +1,6 @@
+=== Evidence: Python test files trackable ===
+
+Test: Python test file in tests/ is NOT ignored
+Command: git check-ignore -v tests/test_example/test_sample.py
+Result: exit code 1 (not ignored)
+Verification: PASS - .py files in tests/ can now be tracked by git

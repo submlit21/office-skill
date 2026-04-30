@@ -1,0 +1,8 @@
+=== Evidence: Test output files still ignored ===
+
+Test: PDF output in tests/ IS still ignored
+Command: git check-ignore -v tests/output.pdf
+Result: exit code 0 (ignored by .gitignore:37:tests/*.pdf)
+Verification: PASS - output files (.pdf, .docx, .xlsx, .pptx) remain ignored
+
+Note: Only these output formats are ignored. Python source files are unaffected.
