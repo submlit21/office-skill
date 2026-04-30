@@ -237,7 +237,7 @@ Max Concurrent: 5 (Wave 1)
   - Files: `.gitignore`
   - Pre-commit: None
 
-- [ ] 2. Remove unnecessary markupsafe dependency
+- [x] 2. Remove unnecessary markupsafe dependency
 
   **What to do**:
   - Edit `pyproject.toml`: remove `markupsafe>=2.0.0` from dependencies list (line 23)

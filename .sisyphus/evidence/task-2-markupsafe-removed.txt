@@ -1,0 +1,4 @@
+Verification: markupsafe removed from pyproject.toml
+Command: grep -n "markupsafe" pyproject.toml
+Result: No matches found
+Status: PASS - markupsafe dependency successfully removed

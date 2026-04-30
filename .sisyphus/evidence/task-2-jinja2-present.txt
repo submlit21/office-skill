@@ -1,0 +1,4 @@
+Verification: jinja2 preserved in pyproject.toml
+Command: grep -n "jinja2" pyproject.toml
+Result: 31: "jinja2>=3.0.0",
+Status: PASS - jinja2 dependency preserved at line 31
