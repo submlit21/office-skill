@@ -34,4 +34,7 @@ build/
 *.egg-info/
 
 # Test outputs
-tests/
+tests/*.pdf
+tests/*.docx
+tests/*.xlsx
+tests/*.pptx
