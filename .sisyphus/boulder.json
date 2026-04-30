@@ -4,7 +4,8 @@
   "session_ids": [
     "ses_223d1d915ffekDyg0EBaBfqXZq",
     "ses_223b711e2ffe3oegvs2VukvH2S",
-    "ses_223b51bfeffeH5WcpHxOukwHQ3"
+    "ses_223b51bfeffeH5WcpHxOukwHQ3",
+    "ses_223b37563ffeVb1KlR7i5iPYYi"
   ],
   "plan_name": "optimization-fixes",
   "agent": "atlas",
@@ -26,6 +27,15 @@
       "agent": "Sisyphus-Junior",
       "category": "quick",
       "updated_at": "2026-04-30T02:50:39.224Z"
+    },
+    "todo:3": {
+      "task_key": "todo:3",
+      "task_label": "3",
+      "task_title": "Add CLI entry point and py.typed marker",
+      "session_id": "ses_223b37563ffeVb1KlR7i5iPYYi",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-30T02:52:29.444Z"
     }
   }
 }

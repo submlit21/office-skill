@@ -309,7 +309,7 @@ Max Concurrent: 5 (Wave 1)
   - Files: `pyproject.toml`
   - Pre-commit: None
 
-- [ ] 3. Add CLI entry point and py.typed marker
+- [x] 3. Add CLI entry point and py.typed marker
 
   **What to do**:
   - Add `[project.scripts]` section to `pyproject.toml` with `office-skill = "office_main.cli.office_cli:main"`

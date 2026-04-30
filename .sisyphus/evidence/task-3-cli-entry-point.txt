@@ -1,0 +1,14 @@
+[project.scripts]
+office-skill = "office_main.cli.office_cli:main"
+
+=== full context ===
+[project.urls]
+Homepage = "https://github.com/example/office-skill"
+Repository = "https://github.com/example/office-skill"
+Issues = "https://github.com/example/office-skill/issues"
+
+[project.scripts]
+office-skill = "office_main.cli.office_cli:main"
+
+[tool.setuptools.packages.find]
+Main function verified in office_cli.py at line 375

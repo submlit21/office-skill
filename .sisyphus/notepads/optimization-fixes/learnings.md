@@ -23,3 +23,14 @@
   - `grep "jinja2" pyproject.toml` → `"jinja2>=3.0.0",` still present (preserved ✅)
   - `grep -r "markupsafe" src/` → empty (no code usage ✅)
 - **Key insight**: Dependencies that are only transitive (brought in by another direct dependency) should not be listed as direct dependencies. Always check for direct imports before adding a dependency. Leaving transitive deps in pyproject.toml bloats the dependency tree and can cause version conflicts.
+
+## 2026-04-30: Added CLI entry point and py.typed marker
+
+- **Changes made**:
+  - Added `[project.scripts]` section to `pyproject.toml` with `office-skill = "office_main.cli.office_cli:main"` (after `[project.urls]`, before `[tool.setuptools.packages.find]`)
+  - Created empty `src/office_main/py.typed` marker file (PEP 561 type hint marker)
+- **Verification**:
+  - `grep -A2 "project.scripts" pyproject.toml` → shows office-skill entry point ✅
+  - `ls -la src/office_main/py.typed` → 0-byte file exists ✅
+  - `main()` function confirmed at `office_cli.py:375` ✅
+- **Key insight**: The `py.typed` marker (PEP 561) must exist at the package root to signal that the package provides type hints. It was already listed in `[tool.setuptools.package-data]` but the file was missing. The `[project.scripts]` entry point enables `office-skill` as a shell command after `pip install -e .`.

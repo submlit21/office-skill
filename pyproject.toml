@@ -36,6 +36,9 @@ Homepage = "https://github.com/example/office-skill"
 Repository = "https://github.com/example/office-skill"
 Issues = "https://github.com/example/office-skill/issues"
 
+[project.scripts]
+office-skill = "office_main.cli.office_cli:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
