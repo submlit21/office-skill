@@ -262,21 +262,20 @@ def template_list(args):
                 print(f"Format: {template['format']}")
                 print(f"Created: {template['created']}")
 
-                if args.verbose:
-                    if template.get("analysis"):
-                        analysis = template["analysis"]
-                        if analysis.get("type") == "word":
-                            print(
-                                f"  Pages: {analysis.get('pages', 0)}, Paragraphs: {analysis.get('paragraphs', 0)}"
-                            )
-                        elif analysis.get("type") == "excel":
-                            print(
-                                f"  Sheets: {analysis.get('sheets', 0)}, Cells: {analysis.get('cells', 0)}"
-                            )
-                        elif analysis.get("type") == "powerpoint":
-                            print(
-                                f"  Slides: {analysis.get('slides', 0)}, Masters: {analysis.get('masters', 0)}"
-                            )
+                if args.verbose and template.get("analysis"):
+                    analysis = template["analysis"]
+                    if analysis.get("type") == "word":
+                        print(
+                            f"  Pages: {analysis.get('pages', 0)}, Paragraphs: {analysis.get('paragraphs', 0)}"
+                        )
+                    elif analysis.get("type") == "excel":
+                        print(
+                            f"  Sheets: {analysis.get('sheets', 0)}, Cells: {analysis.get('cells', 0)}"
+                        )
+                    elif analysis.get("type") == "powerpoint":
+                        print(
+                            f"  Slides: {analysis.get('slides', 0)}, Masters: {analysis.get('masters', 0)}"
+                        )
 
                 print("-" * 80)
 

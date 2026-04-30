@@ -778,7 +778,7 @@ Max Concurrent: 5 (Wave 1)
   - Files: `src/template_manager/analyzer.py`, `src/template_manager/generator.py`
   - Pre-commit: None
 
-- [ ] 9. Apply ruff auto-fixes for new rules
+- [x] 9. Apply ruff auto-fixes for new rules
 
   **What to do**:
   - Run `ruff check --fix src/` to auto-fix violations from new rules (UP, N, SIM, PLC, PLE, RUF100)

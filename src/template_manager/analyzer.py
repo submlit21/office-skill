@@ -9,8 +9,9 @@ from __future__ import annotations
 
 import subprocess
 import tempfile
+from contextlib import suppress
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, Union
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from office_main.core.cli_wrapper import LibreOfficeCLI
@@ -37,7 +38,7 @@ class TemplateAnalyzer:
 
         # Create temporary output file
         with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as tmp:
-            output_path: Union[str, Path] = tmp.name
+            output_path: str | Path = tmp.name
 
         temp_cli = None
         session_file = None
@@ -58,7 +59,7 @@ class TemplateAnalyzer:
 
                 # Read text output and convert to simple markdown
                 if text_output.exists():
-                    with open(text_output, "r", encoding="utf-8") as f:
+                    with open(text_output, encoding="utf-8") as f:
                         text_content = f.read()
 
                     # Check if content is meaningful (not empty or just whitespace)
@@ -147,7 +148,7 @@ class TemplateAnalyzer:
             if converted:
                 # Read the converted markdown
                 output_path_obj = Path(output_path)
-                with open(output_path_obj, "r", encoding="utf-8") as f:
+                with open(output_path_obj, encoding="utf-8") as f:
                     markdown_content = f.read()
             else:
                 # Conversion failed
@@ -181,13 +182,10 @@ class TemplateAnalyzer:
                 actual_output.unlink()
             # Always end session if it was created
             if temp_cli is not None and session_file is not None:
-                try:
+                with suppress(Exception):
                     temp_cli.end_session()
-                except Exception:
-                    # Ignore cleanup errors to not mask the actual result
-                    pass
 
-    def analyze_document_structure(self, source_path: Path) -> Dict[str, Any]:
+    def analyze_document_structure(self, source_path: Path) -> dict[str, Any]:
         """Analyze document structure for template metadata."""
         source_path = source_path.absolute()
 
@@ -206,7 +204,7 @@ class TemplateAnalyzer:
         else:
             raise ValueError(f"Unsupported file format: {ext}")
 
-    def _analyze_word_document(self, path: Path) -> Dict[str, Any]:
+    def _analyze_word_document(self, path: Path) -> dict[str, Any]:
         """Analyze Word document structure."""
         try:
             # Create a temporary session to analyze the document
@@ -230,10 +228,7 @@ class TemplateAnalyzer:
 
             paragraphs = headings = tables = images = 0
             for item in items:
-                if isinstance(item, dict):
-                    item_type = item.get("type", "")
-                else:
-                    item_type = str(item)
+                item_type = item.get("type", "") if isinstance(item, dict) else str(item)
 
                 if item_type == "paragraph":
                     paragraphs += 1
@@ -274,7 +269,7 @@ class TemplateAnalyzer:
                 "content_count": 0,
             }
 
-    def _analyze_excel_document(self, path: Path) -> Dict[str, Any]:
+    def _analyze_excel_document(self, path: Path) -> dict[str, Any]:
         """Analyze Excel document structure."""
         try:
             # Create a temporary session to analyze the document
@@ -328,7 +323,7 @@ class TemplateAnalyzer:
                 "sheet_names": [],
             }
 
-    def _analyze_powerpoint_document(self, path: Path) -> Dict[str, Any]:
+    def _analyze_powerpoint_document(self, path: Path) -> dict[str, Any]:
         """Analyze PowerPoint document structure."""
         try:
             # Create a temporary session to analyze the document
@@ -353,7 +348,7 @@ class TemplateAnalyzer:
             slide_count = len(slides)
 
             # Count layouts and check for notes
-            layouts: Dict[str, int] = {}
+            layouts: dict[str, int] = {}
             has_notes = False
             for slide in slides:
                 if isinstance(slide, dict):

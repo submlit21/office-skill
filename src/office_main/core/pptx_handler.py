@@ -5,7 +5,7 @@ Provides high-level operations for PowerPoint presentation manipulation.
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .base_handler import BaseDocumentHandler
 
@@ -13,7 +13,7 @@ from .base_handler import BaseDocumentHandler
 class PptxHandler(BaseDocumentHandler):
     """Handler for PowerPoint presentation operations."""
 
-    def __init__(self, presentation_path: str, project_path: Optional[str] = None):
+    def __init__(self, presentation_path: str, project_path: str | None = None):
         """
         Initialize handler for a PowerPoint presentation.
 
@@ -27,8 +27,8 @@ class PptxHandler(BaseDocumentHandler):
         self._start_session(str(self.presentation_path))
 
     def add_slide(
-        self, layout: str = "Title and Content", index: Optional[int] = None
-    ) -> Dict[str, Any]:
+        self, layout: str = "Title and Content", index: int | None = None
+    ) -> dict[str, Any]:
         """
         Add a slide to the presentation.
 
@@ -44,7 +44,7 @@ class PptxHandler(BaseDocumentHandler):
             kwargs["index"] = str(index)
         return self.cli.impress("add-slide", positional=None, **kwargs)
 
-    def remove_slide(self, index: int) -> Dict[str, Any]:
+    def remove_slide(self, index: int) -> dict[str, Any]:
         """
         Remove a slide by index.
 
@@ -56,7 +56,7 @@ class PptxHandler(BaseDocumentHandler):
         """
         return self.cli.impress("remove-slide", positional=[str(index)])
 
-    def list_slides(self) -> Dict[str, Any]:
+    def list_slides(self) -> dict[str, Any]:
         """
         List all slides in the presentation.
 
@@ -66,8 +66,8 @@ class PptxHandler(BaseDocumentHandler):
         return self.cli.impress("list-slides")
 
     def set_content(
-        self, slide_index: int, title: Optional[str] = None, content: Optional[str] = None
-    ) -> Dict[str, Any]:
+        self, slide_index: int, title: str | None = None, content: str | None = None
+    ) -> dict[str, Any]:
         """
         Update a slide's title and/or content.
 
@@ -86,7 +86,7 @@ class PptxHandler(BaseDocumentHandler):
             kwargs["content"] = content
         return self.cli.impress("set-content", positional=[str(slide_index)], **kwargs)
 
-    def set_layout(self, slide_index: int, layout: str) -> Dict[str, Any]:
+    def set_layout(self, slide_index: int, layout: str) -> dict[str, Any]:
         """
         Set slide layout.
 
@@ -99,7 +99,7 @@ class PptxHandler(BaseDocumentHandler):
         """
         return self.cli.impress("set-layout", positional=[str(slide_index), layout])
 
-    def add_element(self, slide_index: int, element_type: str, **kwargs) -> Dict[str, Any]:
+    def add_element(self, slide_index: int, element_type: str, **kwargs) -> dict[str, Any]:
         """
         Add an element to a slide.
 
@@ -116,7 +116,7 @@ class PptxHandler(BaseDocumentHandler):
         all_kwargs.update(kwargs)
         return self.cli.impress("add-element", positional=None, **all_kwargs)
 
-    def modify_element(self, slide_index: int, element_index: int, **kwargs) -> Dict[str, Any]:
+    def modify_element(self, slide_index: int, element_index: int, **kwargs) -> dict[str, Any]:
         """
         Modify an existing element on a slide.
 
@@ -132,7 +132,7 @@ class PptxHandler(BaseDocumentHandler):
         all_kwargs.update(kwargs)
         return self.cli.impress("modify-element", positional=None, **all_kwargs)
 
-    def set_speaker_notes(self, slide_index: int, notes: str) -> Dict[str, Any]:
+    def set_speaker_notes(self, slide_index: int, notes: str) -> dict[str, Any]:
         """
         Set speaker notes for a slide.
 
@@ -145,7 +145,7 @@ class PptxHandler(BaseDocumentHandler):
         """
         return self.cli.impress("set-speaker-notes", positional=[str(slide_index), notes])
 
-    def get_speaker_notes(self, slide_index: int) -> Dict[str, Any]:
+    def get_speaker_notes(self, slide_index: int) -> dict[str, Any]:
         """
         Get speaker notes for a slide.
 
@@ -157,7 +157,7 @@ class PptxHandler(BaseDocumentHandler):
         """
         return self.cli.impress("get-speaker-notes", positional=[str(slide_index)])
 
-    def create_from_template(self, template_path: Optional[str] = None) -> "PptxHandler":
+    def create_from_template(self, template_path: str | None = None) -> "PptxHandler":
         """
         Create a new presentation from template.
 
@@ -178,7 +178,7 @@ class PptxHandler(BaseDocumentHandler):
             "Use LibreOfficeCLI.document('new', ...) for presentation creation."
         )
 
-    def analyze_structure(self) -> Dict[str, Any]:
+    def analyze_structure(self) -> dict[str, Any]:
         """
         Analyze presentation structure.
 
@@ -189,7 +189,7 @@ class PptxHandler(BaseDocumentHandler):
         slide_count = len(slides.get("slides", []))
 
         # Analyze layouts
-        layouts: Dict[str, int] = {}
+        layouts: dict[str, int] = {}
         for slide in slides.get("slides", []):
             layout = slide.get("layout", "Unknown")
             layouts[layout] = layouts.get(layout, 0) + 1
@@ -203,7 +203,7 @@ class PptxHandler(BaseDocumentHandler):
             ),
         }
 
-    def create_slide_deck(self, slides_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def create_slide_deck(self, slides_data: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Create a complete slide deck from structured data.
 

@@ -9,7 +9,7 @@ import json
 import os
 import shutil
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import yaml
 
@@ -22,7 +22,7 @@ class TemplateStorage:
         self.templates_root = templates_root
         self.templates_root.mkdir(parents=True, exist_ok=True)
 
-    def _parse_template_name(self, name: str) -> Dict[str, str]:
+    def _parse_template_name(self, name: str) -> dict[str, str]:
         """Parse template name in format: domain.type.purpose.variant.version."""
         parts = name.split(".")
         if len(parts) != 5:
@@ -71,10 +71,10 @@ class TemplateStorage:
     def save_template(
         self,
         name: str,
-        metadata: Dict[str, Any],
+        metadata: dict[str, Any],
         markdown_content: str,
         source_path: Path,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Save template files to storage."""
         template_dir = self._get_template_path(name)
         template_dir.mkdir(parents=True, exist_ok=True)
@@ -119,7 +119,7 @@ class TemplateStorage:
         metadata["template_path"] = str(template_dir)
         return metadata
 
-    def _enhance_metadata(self, metadata: Dict[str, Any]) -> Dict[str, Any]:
+    def _enhance_metadata(self, metadata: dict[str, Any]) -> dict[str, Any]:
         """Enhance metadata with SchemeB format fields if missing."""
         # Determine schema version
         if "schema_version" not in metadata:
@@ -160,7 +160,7 @@ class TemplateStorage:
 
         return metadata
 
-    def load_template(self, name: str) -> Dict[str, Any]:
+    def load_template(self, name: str) -> dict[str, Any]:
         """Load template metadata and content from storage."""
         template_dir = self._get_template_path(name)
 
@@ -172,7 +172,7 @@ class TemplateStorage:
         if not metadata_path.exists():
             raise FileNotFoundError(f"Metadata not found for template: {name}")
 
-        with open(metadata_path, "r", encoding="utf-8") as f:
+        with open(metadata_path, encoding="utf-8") as f:
             metadata = json.load(f)
 
         # Enhance metadata with SchemeB format if needed
@@ -183,7 +183,7 @@ class TemplateStorage:
         if format_type in ["docx", "doc"]:
             content_path = template_dir / "template.md"
             if content_path.exists():
-                with open(content_path, "r", encoding="utf-8") as f:
+                with open(content_path, encoding="utf-8") as f:
                     markdown_content = f.read()
                 metadata["markdown_content"] = markdown_content
             else:
@@ -193,7 +193,7 @@ class TemplateStorage:
             yaml_path = template_dir / "template.yaml"
             if yaml_path.exists():
                 try:
-                    with open(yaml_path, "r", encoding="utf-8") as f:
+                    with open(yaml_path, encoding="utf-8") as f:
                         yaml_data = yaml.safe_load(f)
                     metadata["markdown_content"] = yaml_data.get("markdown_content", "")
                     metadata["yaml_data"] = yaml_data
@@ -201,7 +201,7 @@ class TemplateStorage:
                     # Fallback: check markdown if yaml not available
                     md_path = template_dir / "template.md"
                     if md_path.exists():
-                        with open(md_path, "r", encoding="utf-8") as f:
+                        with open(md_path, encoding="utf-8") as f:
                             metadata["markdown_content"] = f.read()
                     else:
                         metadata["markdown_content"] = None
@@ -209,7 +209,7 @@ class TemplateStorage:
                 # Fallback to markdown
                 md_path = template_dir / "template.md"
                 if md_path.exists():
-                    with open(md_path, "r", encoding="utf-8") as f:
+                    with open(md_path, encoding="utf-8") as f:
                         metadata["markdown_content"] = f.read()
                 else:
                     metadata["markdown_content"] = None
@@ -242,10 +242,10 @@ class TemplateStorage:
 
     def list_templates(
         self,
-        domain: Optional[str] = None,
-        type_filter: Optional[str] = None,
-        purpose: Optional[str] = None,
-    ) -> List[str]:
+        domain: str | None = None,
+        type_filter: str | None = None,
+        purpose: str | None = None,
+    ) -> list[str]:
         """List available template names with optional filtering."""
         template_names = []
 
@@ -277,6 +277,6 @@ class TemplateStorage:
 
         return template_names
 
-    def get_parsed_components(self, name: str) -> Dict[str, str]:
+    def get_parsed_components(self, name: str) -> dict[str, str]:
         """Get parsed template name components."""
         return self._parse_template_name(name)

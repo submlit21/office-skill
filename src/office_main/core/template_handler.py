@@ -7,7 +7,7 @@ delegating to specialized modules for storage, analysis, search, and generation.
 
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 # Import template manager components directly (avoid circular import through template_manager.__init__)
 from template_manager.analyzer import TemplateAnalyzer
@@ -29,7 +29,7 @@ class TemplateManager:
     - TemplateGenerator: Document generation from templates
     """
 
-    def __init__(self, templates_root: Optional[Union[str, Path]] = None):
+    def __init__(self, templates_root: str | Path | None = None):
         """
         Initialize template manager.
 
@@ -68,12 +68,12 @@ class TemplateManager:
 
     def add_template(
         self,
-        source_path: Union[str, Path],
+        source_path: str | Path,
         name: str,
-        description: Optional[str] = None,
-        tags: Optional[List[str]] = None,
+        description: str | None = None,
+        tags: list[str] | None = None,
         overwrite: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Add a new template to the template library.
 
@@ -134,7 +134,7 @@ class TemplateManager:
         # Save to storage
         return self.storage.save_template(name, metadata, markdown_content, source_path)
 
-    def get_template(self, name: str) -> Dict[str, Any]:
+    def get_template(self, name: str) -> dict[str, Any]:
         """
         Get template by name.
 
@@ -148,10 +148,10 @@ class TemplateManager:
 
     def list_templates(
         self,
-        domain: Optional[str] = None,
-        type_filter: Optional[str] = None,
-        purpose: Optional[str] = None,
-    ) -> List[Dict[str, Any]]:
+        domain: str | None = None,
+        type_filter: str | None = None,
+        purpose: str | None = None,
+    ) -> list[dict[str, Any]]:
         """
         List available templates with optional filtering.
 
@@ -165,7 +165,7 @@ class TemplateManager:
         """
         return self.search.list_filtered(domain, type_filter, purpose)
 
-    def search_templates(self, query: str) -> List[Dict[str, Any]]:
+    def search_templates(self, query: str) -> list[dict[str, Any]]:
         """
         Search templates by name, description, or tags.
 
@@ -200,9 +200,9 @@ class TemplateManager:
     def generate_from_template(
         self,
         template_name: str,
-        output_path: Union[str, Path],
-        variables: Optional[Dict[str, str]] = None,
-    ) -> Dict[str, Any]:
+        output_path: str | Path,
+        variables: dict[str, str] | None = None,
+    ) -> dict[str, Any]:
         """
         Generate a new document from a template.
 
@@ -216,7 +216,7 @@ class TemplateManager:
         """
         return self.generator.generate(template_name, output_path, variables)
 
-    def convert_to_markdown(self, source_path: Union[str, Path]) -> str:
+    def convert_to_markdown(self, source_path: str | Path) -> str:
         """
         Convert office document to markdown format.
 
@@ -229,7 +229,7 @@ class TemplateManager:
         source_path = Path(source_path)
         return self.analyzer.convert_to_markdown(source_path)
 
-    def analyze_document_structure(self, source_path: Union[str, Path]) -> Dict[str, Any]:
+    def analyze_document_structure(self, source_path: str | Path) -> dict[str, Any]:
         """
         Analyze document structure for template metadata.
 

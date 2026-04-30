@@ -4,7 +4,7 @@ Template search - Search and filter templates in storage.
 This module provides search functionality across the template library.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .storage import TemplateStorage
 
@@ -16,7 +16,7 @@ class TemplateSearch:
         """Initialize search with storage instance."""
         self.storage = storage
 
-    def search(self, query: str) -> List[Dict[str, Any]]:
+    def search(self, query: str) -> list[dict[str, Any]]:
         """Search templates by name, description, or tags."""
         all_templates = self.list_all()
         query_lower = query.lower()
@@ -52,10 +52,10 @@ class TemplateSearch:
 
     def list_filtered(
         self,
-        domain: Optional[str] = None,
-        type_filter: Optional[str] = None,
-        purpose: Optional[str] = None,
-    ) -> List[Dict[str, Any]]:
+        domain: str | None = None,
+        type_filter: str | None = None,
+        purpose: str | None = None,
+    ) -> list[dict[str, Any]]:
         """List templates with filtering."""
         template_names = self.storage.list_templates(domain, type_filter, purpose)
         results = []
@@ -70,6 +70,6 @@ class TemplateSearch:
 
         return results
 
-    def list_all(self) -> List[str]:
+    def list_all(self) -> list[str]:
         """List all template names without filtering."""
         return self.storage.list_templates()

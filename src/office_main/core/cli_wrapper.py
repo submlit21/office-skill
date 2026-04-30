@@ -10,7 +10,7 @@ import os
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 try:
     from cli_anything.libreoffice.core.document import create_document
@@ -24,7 +24,7 @@ except ImportError:
 class LibreOfficeCLI:
     """Main interface to cli-anything-libreoffice."""
 
-    def __init__(self, project_path: Optional[str] = None, json_output: bool = True):
+    def __init__(self, project_path: str | None = None, json_output: bool = True):
         """
         Initialize the CLI wrapper.
 
@@ -34,9 +34,9 @@ class LibreOfficeCLI:
         """
         self.project_path = project_path
         self.json_output = json_output
-        self._session_file: Optional[str] = None
+        self._session_file: str | None = None
 
-    def _run_command(self, args: List[str]) -> Dict[str, Any]:
+    def _run_command(self, args: list[str]) -> dict[str, Any]:
         """
         Run a cli-anything-libreoffice command and return parsed output.
 
@@ -114,10 +114,10 @@ class LibreOfficeCLI:
         self,
         command_name: str,
         subcommand: str,
-        positional: Optional[List[str]] = None,
+        positional: list[str] | None = None,
         handle_bool_flags: bool = True,
         **kwargs: Any,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Execute a cli-anything-libreoffice subcommand.
 
         Args:
@@ -195,8 +195,8 @@ class LibreOfficeCLI:
             self._session_file = None
 
     def writer(
-        self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, subcommand: str, positional: list[str] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Execute a writer (Word) command.
 
         Args:
@@ -210,8 +210,8 @@ class LibreOfficeCLI:
         return self._run_subcommand("writer", subcommand, positional, **kwargs)
 
     def calc(
-        self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, subcommand: str, positional: list[str] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Execute a calc (Excel) command.
 
         Args:
@@ -225,8 +225,8 @@ class LibreOfficeCLI:
         return self._run_subcommand("calc", subcommand, positional, **kwargs)
 
     def impress(
-        self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, subcommand: str, positional: list[str] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Execute an impress (PowerPoint) command.
 
         Args:
@@ -240,8 +240,8 @@ class LibreOfficeCLI:
         return self._run_subcommand("impress", subcommand, positional, **kwargs)
 
     def export(
-        self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, subcommand: str, positional: list[str] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Execute an export command.
 
         Args:
@@ -255,8 +255,8 @@ class LibreOfficeCLI:
         return self._run_subcommand("export", subcommand, positional, **kwargs)
 
     def document(
-        self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, subcommand: str, positional: list[str] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Execute a document management command.
 
         Args:
@@ -272,8 +272,8 @@ class LibreOfficeCLI:
         )
 
     def session(
-        self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, subcommand: str, positional: list[str] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Execute a session management command.
 
         Args:
@@ -289,8 +289,8 @@ class LibreOfficeCLI:
         )
 
     def style(
-        self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, subcommand: str, positional: list[str] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Execute a style management command.
 
         Args:
@@ -306,8 +306,8 @@ class LibreOfficeCLI:
         )
 
     def batch(
-        self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self, subcommand: str, positional: list[str] | None = None, **kwargs
+    ) -> dict[str, Any]:
         """Execute a batch processing command.
 
         Args:

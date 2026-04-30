@@ -5,7 +5,7 @@ Provides high-level operations for Excel spreadsheet manipulation.
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .base_handler import BaseDocumentHandler
 
@@ -13,7 +13,7 @@ from .base_handler import BaseDocumentHandler
 class XlsxHandler(BaseDocumentHandler):
     """Handler for Excel spreadsheet operations."""
 
-    def __init__(self, spreadsheet_path: str, project_path: Optional[str] = None):
+    def __init__(self, spreadsheet_path: str, project_path: str | None = None):
         """
         Initialize handler for an Excel spreadsheet.
 
@@ -26,7 +26,7 @@ class XlsxHandler(BaseDocumentHandler):
         self.spreadsheet_path = Path(spreadsheet_path).absolute()
         self._start_session(str(self.spreadsheet_path))
 
-    def get_cell(self, sheet: str, cell_ref: str) -> Dict[str, Any]:
+    def get_cell(self, sheet: str, cell_ref: str) -> dict[str, Any]:
         """
         Get a cell value.
 
@@ -41,7 +41,7 @@ class XlsxHandler(BaseDocumentHandler):
 
     def set_cell(
         self, sheet: str, cell_ref: str, value: str, formula: bool = False
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Set a cell value.
 
@@ -61,7 +61,7 @@ class XlsxHandler(BaseDocumentHandler):
             kwargs["formula"] = ""
         return self.cli.calc("set-cell", positional=[cell_ref, value], **kwargs)
 
-    def set_cell_format(self, sheet: str, cell_ref: str, format_spec: str) -> Dict[str, Any]:
+    def set_cell_format(self, sheet: str, cell_ref: str, format_spec: str) -> dict[str, Any]:
         """
         Set formatting for a cell.
 
@@ -77,7 +77,7 @@ class XlsxHandler(BaseDocumentHandler):
             "set-cell-format", positional=[cell_ref], sheet=sheet, format=format_spec
         )
 
-    def add_sheet(self, name: str, index: Optional[int] = None) -> Dict[str, Any]:
+    def add_sheet(self, name: str, index: int | None = None) -> dict[str, Any]:
         """
         Add a new sheet.
 
@@ -88,12 +88,12 @@ class XlsxHandler(BaseDocumentHandler):
         Returns:
             Command result
         """
-        kwargs: Dict[str, Any] = {"name": name}
+        kwargs: dict[str, Any] = {"name": name}
         if index is not None:
             kwargs["index"] = str(index)
         return self.cli.calc("add-sheet", positional=None, **kwargs)
 
-    def remove_sheet(self, sheet: str) -> Dict[str, Any]:
+    def remove_sheet(self, sheet: str) -> dict[str, Any]:
         """
         Remove a sheet.
 
@@ -105,7 +105,7 @@ class XlsxHandler(BaseDocumentHandler):
         """
         return self.cli.calc("remove-sheet", positional=[sheet])
 
-    def rename_sheet(self, old_name: str, new_name: str) -> Dict[str, Any]:
+    def rename_sheet(self, old_name: str, new_name: str) -> dict[str, Any]:
         """
         Rename a sheet.
 
@@ -118,7 +118,7 @@ class XlsxHandler(BaseDocumentHandler):
         """
         return self.cli.calc("rename-sheet", positional=[old_name, new_name])
 
-    def list_sheets(self) -> Dict[str, Any]:
+    def list_sheets(self) -> dict[str, Any]:
         """
         List all sheets in the workbook.
 
@@ -127,7 +127,7 @@ class XlsxHandler(BaseDocumentHandler):
         """
         return self.cli.calc("list-sheets")
 
-    def merge_cells(self, sheet: str, range_ref: str) -> Dict[str, Any]:
+    def merge_cells(self, sheet: str, range_ref: str) -> dict[str, Any]:
         """
         Merge a range of cells.
 
@@ -140,7 +140,7 @@ class XlsxHandler(BaseDocumentHandler):
         """
         return self.cli.calc("merge", positional=[range_ref], sheet=sheet)
 
-    def unmerge_cells(self, sheet: str, cell_ref: str) -> Dict[str, Any]:
+    def unmerge_cells(self, sheet: str, cell_ref: str) -> dict[str, Any]:
         """
         Unmerge cells.
 
@@ -153,7 +153,7 @@ class XlsxHandler(BaseDocumentHandler):
         """
         return self.cli.calc("unmerge", positional=[cell_ref], sheet=sheet)
 
-    def create_from_template(self, template_path: Optional[str] = None) -> "XlsxHandler":
+    def create_from_template(self, template_path: str | None = None) -> "XlsxHandler":
         """
         Create a new spreadsheet from template.
 
@@ -174,7 +174,7 @@ class XlsxHandler(BaseDocumentHandler):
             "Use LibreOfficeCLI.document('new', ...) for spreadsheet creation."
         )
 
-    def analyze_structure(self) -> Dict[str, Any]:
+    def analyze_structure(self) -> dict[str, Any]:
         """
         Analyze spreadsheet structure.
 
@@ -198,7 +198,7 @@ class XlsxHandler(BaseDocumentHandler):
             "estimated_formula_count": formula_count,
         }
 
-    def validate_formulas(self) -> Dict[str, Any]:
+    def validate_formulas(self) -> dict[str, Any]:
         """
         Validate formulas in the spreadsheet.
 
@@ -217,9 +217,9 @@ class XlsxHandler(BaseDocumentHandler):
     def apply_financial_formatting(
         self,
         sheet: str,
-        currency_cells: Optional[List[str]] = None,
-        percent_cells: Optional[List[str]] = None,
-    ) -> Dict[str, Any]:
+        currency_cells: list[str] | None = None,
+        percent_cells: list[str] | None = None,
+    ) -> dict[str, Any]:
         """
         Apply financial formatting standards.
 

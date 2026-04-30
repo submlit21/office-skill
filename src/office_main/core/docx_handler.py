@@ -5,7 +5,7 @@ Provides high-level operations for Word document manipulation.
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .base_handler import BaseDocumentHandler
 
@@ -13,7 +13,7 @@ from .base_handler import BaseDocumentHandler
 class DocxHandler(BaseDocumentHandler):
     """Handler for Word document operations."""
 
-    def __init__(self, document_path: str, project_path: Optional[str] = None):
+    def __init__(self, document_path: str, project_path: str | None = None):
         """
         Initialize handler for a Word document.
 
@@ -26,7 +26,7 @@ class DocxHandler(BaseDocumentHandler):
         self.document_path = Path(document_path).absolute()
         self._start_session(str(self.document_path))
 
-    def add_paragraph(self, text: str, index: Optional[int] = None) -> Dict[str, Any]:
+    def add_paragraph(self, text: str, index: int | None = None) -> dict[str, Any]:
         """
         Add a paragraph to the document.
 
@@ -42,7 +42,7 @@ class DocxHandler(BaseDocumentHandler):
             kwargs["index"] = str(index)
         return self.cli.writer("add-paragraph", positional=None, **kwargs)
 
-    def add_heading(self, text: str, level: int = 1, index: Optional[int] = None) -> Dict[str, Any]:
+    def add_heading(self, text: str, level: int = 1, index: int | None = None) -> dict[str, Any]:
         """
         Add a heading to the document.
 
@@ -59,7 +59,7 @@ class DocxHandler(BaseDocumentHandler):
             kwargs["index"] = str(index)
         return self.cli.writer("add-heading", positional=None, **kwargs)
 
-    def add_table(self, rows: int, cols: int, index: Optional[int] = None) -> Dict[str, Any]:
+    def add_table(self, rows: int, cols: int, index: int | None = None) -> dict[str, Any]:
         """
         Add a table to the document.
 
@@ -76,7 +76,7 @@ class DocxHandler(BaseDocumentHandler):
             kwargs["index"] = str(index)
         return self.cli.writer("add-table", positional=None, **kwargs)
 
-    def set_table_cell(self, table_index: int, row: int, col: int, value: str) -> Dict[str, Any]:
+    def set_table_cell(self, table_index: int, row: int, col: int, value: str) -> dict[str, Any]:
         """
         Set the value of a table cell.
 
@@ -94,7 +94,7 @@ class DocxHandler(BaseDocumentHandler):
             positional=[str(table_index), str(row), str(col), value],
         )
 
-    def get_table_cell(self, table_index: int, row: int, col: int) -> Dict[str, Any]:
+    def get_table_cell(self, table_index: int, row: int, col: int) -> dict[str, Any]:
         """
         Get the value of a table cell.
 
@@ -111,7 +111,7 @@ class DocxHandler(BaseDocumentHandler):
             positional=[str(table_index), str(row), str(col)],
         )
 
-    def add_list(self, items: List[str], index: Optional[int] = None) -> Dict[str, Any]:
+    def add_list(self, items: list[str], index: int | None = None) -> dict[str, Any]:
         """
         Add a list to the document.
 
@@ -129,7 +129,7 @@ class DocxHandler(BaseDocumentHandler):
             kwargs["index"] = str(index)
         return self.cli.writer("add-list", positional=None, **kwargs)
 
-    def add_page_break(self, index: Optional[int] = None) -> Dict[str, Any]:
+    def add_page_break(self, index: int | None = None) -> dict[str, Any]:
         """
         Add a page break.
 
@@ -144,7 +144,7 @@ class DocxHandler(BaseDocumentHandler):
             kwargs["index"] = str(index)
         return self.cli.writer("add-page-break", positional=None, **kwargs)
 
-    def set_text(self, index: int, text: str) -> Dict[str, Any]:
+    def set_text(self, index: int, text: str) -> dict[str, Any]:
         """
         Set the text of a content item.
 
@@ -157,7 +157,7 @@ class DocxHandler(BaseDocumentHandler):
         """
         return self.cli.writer("set-text", positional=[str(index), text])
 
-    def remove(self, index: int) -> Dict[str, Any]:
+    def remove(self, index: int) -> dict[str, Any]:
         """
         Remove a content item by index.
 
@@ -169,7 +169,7 @@ class DocxHandler(BaseDocumentHandler):
         """
         return self.cli.writer("remove", positional=[str(index)])
 
-    def list_content(self) -> Dict[str, Any]:
+    def list_content(self) -> dict[str, Any]:
         """
         List all content items in the document.
 
@@ -178,7 +178,7 @@ class DocxHandler(BaseDocumentHandler):
         """
         return self.cli.writer("list")
 
-    def create_from_template(self, template_path: Optional[str] = None) -> "DocxHandler":
+    def create_from_template(self, template_path: str | None = None) -> "DocxHandler":
         """
         Create a new document from template.
 
@@ -199,7 +199,7 @@ class DocxHandler(BaseDocumentHandler):
             "Use LibreOfficeCLI.document('new', ...) for document creation."
         )
 
-    def analyze_structure(self) -> Dict[str, Any]:
+    def analyze_structure(self) -> dict[str, Any]:
         """
         Analyze document structure.
 
@@ -208,10 +208,7 @@ class DocxHandler(BaseDocumentHandler):
         """
         content = self.list_content()
         # Add additional analysis logic here
-        if isinstance(content, list):
-            items = content
-        else:
-            items = content.get("items", [])
+        items = content if isinstance(content, list) else content.get("items", [])
         return {
             "document": str(self.document_path),
             "content_summary": content,

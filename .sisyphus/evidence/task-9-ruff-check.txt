@@ -1,0 +1,14 @@
+Ruff check result (final):
+⤷ ruff check src/
+⤷ All checks passed! (warning about deprecated lint settings only)
+
+Complete output:
+=======================
+$ ruff check src/
+warning: The top-level linter settings are deprecated in favour of their counterparts in the `lint` section. Please update the following options in `pyproject.toml`:
+  - 'ignore' -> 'lint.ignore'
+  - 'select' -> 'lint.select'
+All checks passed!
+
+Auto-fix summary: 184 violations fixed automatically, 6 fixed manually.
+Total: 190 violations → 0 remaining.

@@ -1,0 +1,5 @@
+Import verification (final):
+⤷ python3 -c "from office_main.core import DocxHandler, XlsxHandler, PptxHandler; print('Imports OK')"
+⤷ Imports OK
+
+All imports work correctly after ruff auto-fixes and manual fixes.

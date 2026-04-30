@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import shutil
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 import jinja2
 from jinja2 import Template
@@ -31,7 +31,7 @@ class TemplateGenerator:
         self.storage = storage
         self.cli = cli
 
-    def _render_with_jinja2(self, template_str: str, variables: Dict[str, str]) -> str:
+    def _render_with_jinja2(self, template_str: str, variables: dict[str, str]) -> str:
         """Render a template string using Jinja2."""
         try:
             template = Template(template_str)
@@ -39,7 +39,7 @@ class TemplateGenerator:
         except jinja2.exceptions.TemplateError as e:
             raise ValueError(f"Template rendering error: {e}") from e
 
-    def _render_variables(self, variables: Dict[str, str]) -> Dict[str, str]:
+    def _render_variables(self, variables: dict[str, str]) -> dict[str, str]:
         """Render variable values as Jinja2 templates (allowing variable interpolation)."""
         rendered = {}
         for key, value in variables.items():
@@ -55,9 +55,9 @@ class TemplateGenerator:
     def generate(
         self,
         template_name: str,
-        output_path: Union[str, Path],
-        variables: Optional[Dict[str, str]] = None,
-    ) -> Dict[str, Any]:
+        output_path: str | Path,
+        variables: dict[str, str] | None = None,
+    ) -> dict[str, Any]:
         """
         Generate a new document from a template.
 
@@ -138,7 +138,7 @@ class TemplateGenerator:
             markdown_content = template_data["markdown_content"]
 
             # First, detect which variables are used in the template (simple placeholder detection)
-            for key in rendered_variables.keys():
+            for key in rendered_variables:
                 placeholder = f"{{{{{key}}}}}"
                 if placeholder in markdown_content:
                     variables_applied.append(key)

@@ -7,8 +7,9 @@ for all Office document format handlers (DOCX/XLSX/PPTX).
 All format-specific methods remain in the concrete subclasses.
 """
 
+import os
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .cli_wrapper import LibreOfficeCLI
 
@@ -23,7 +24,7 @@ class BaseDocumentHandler(ABC):
     - Provide ``analyze_structure()`` and ``create_from_template()``
     """
 
-    def __init__(self, project_path: Optional[str] = None):
+    def __init__(self, project_path: str | None = None):
         """Initialize shared handler state.
 
         Args:
@@ -33,7 +34,7 @@ class BaseDocumentHandler(ABC):
         """
         self.project_path = project_path
         self._temp_session = False
-        self.cli: "LibreOfficeCLI" = None  # type: ignore[assignment]
+        self.cli: LibreOfficeCLI = None  # type: ignore[assignment]
 
     def _start_session(self, document_path: str) -> None:
         """Start a temporary LibreOffice session if no project_path was provided.
@@ -49,7 +50,7 @@ class BaseDocumentHandler(ABC):
 
         self.cli = LibreOfficeCLI(project_path=self.project_path)
 
-    def export(self, output_path: str, format: str = "pdf") -> Dict[str, Any]:
+    def export(self, output_path: str, format: str = "pdf") -> dict[str, Any]:
         """Export the document to another format.
 
         Args:
@@ -65,8 +66,6 @@ class BaseDocumentHandler(ABC):
         """Close the handler and clean up temporary session files."""
         if self._temp_session and self.project_path:
             try:
-                import os
-
                 if os.path.exists(self.project_path):
                     os.unlink(self.project_path)
             except Exception:
@@ -74,7 +73,7 @@ class BaseDocumentHandler(ABC):
         self.cli.end_session()
 
     @abstractmethod
-    def analyze_structure(self) -> Dict[str, Any]:
+    def analyze_structure(self) -> dict[str, Any]:
         """Analyze document structure.
 
         Returns:
@@ -82,7 +81,7 @@ class BaseDocumentHandler(ABC):
         """
 
     @abstractmethod
-    def create_from_template(self, template_path: Optional[str] = None) -> "BaseDocumentHandler":
+    def create_from_template(self, template_path: str | None = None) -> "BaseDocumentHandler":
         """Create a new document from template.
 
         Args:
