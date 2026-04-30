@@ -1,0 +1,22 @@
+Task 4 Evidence: Python Classifiers
+
+File: pyproject.toml
+
+Classifiers changed:
+  Removed:
+    - "Programming Language :: Python :: 3.8"
+    - "Programming Language :: Python :: 3.9"
+  Added:
+    - "Programming Language :: Python :: 3.12"
+    - "Programming Language :: Python :: 3.13"
+  Retained:
+    - "Programming Language :: Python :: 3"
+    - "Programming Language :: Python :: 3.10"
+    - "Programming Language :: Python :: 3.11"
+
+Verification:
+  Line 19: "Programming Language :: Python :: 3"
+  Line 20: "Programming Language :: Python :: 3.10"
+  Line 21: "Programming Language :: Python :: 3.11"
+  Line 22: "Programming Language :: Python :: 3.12"
+  Line 23: "Programming Language :: Python :: 3.13"

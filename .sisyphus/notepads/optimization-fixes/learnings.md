@@ -34,3 +34,16 @@
   - `ls -la src/office_main/py.typed` → 0-byte file exists ✅
   - `main()` function confirmed at `office_cli.py:375` ✅
 - **Key insight**: The `py.typed` marker (PEP 561) must exist at the package root to signal that the package provides type hints. It was already listed in `[tool.setuptools.package-data]` but the file was missing. The `[project.scripts]` entry point enables `office-skill` as a shell command after `pip install -e .`.
+
+## 2026-04-30: Standardized Python version targets to 3.10+
+
+- **Changes in `pyproject.toml`**:
+  - `requires-python`: `">=3.8"` → `">=3.10"`
+  - `[tool.black] target-version`: `['py38']` → `['py310']`
+  - `[tool.ruff] target-version`: `"py38"` → `"py310"`
+  - `[tool.mypy] python_version`: `"3.9"` → `"3.10"`
+  - Classifiers: removed `3.8` and `3.9`, added `3.12` and `3.13`
+- **Verification**:
+  - All 5 settings confirmed via `read pyproject.toml` ✅
+  - No Python source code was modified
+- **Key insight**: Keeping all Python version targets in sync across requires-python, black, ruff, mypy, and classifiers prevents confusion and ensures tools agree on the minimum supported version. When raising the minimum, always update all five locations.

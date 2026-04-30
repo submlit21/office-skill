@@ -385,7 +385,7 @@ Max Concurrent: 5 (Wave 1)
   - Files: `pyproject.toml`, `src/office_main/py.typed`
   - Pre-commit: None
 
-- [ ] 4. Standardize Python version targets to 3.10+
+- [x] 4. Standardize Python version targets to 3.10+
 
   **What to do**:
   - Update `pyproject.toml` line 8: change `requires-python = ">=3.8"` to `requires-python = ">=3.10"`
