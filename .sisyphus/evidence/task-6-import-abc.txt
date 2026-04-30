@@ -1,0 +1,2 @@
+$ python3 -c "from office_main.core.base_handler import BaseDocumentHandler; print('ABC import OK')"
+ABC import OK

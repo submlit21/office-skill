@@ -539,7 +539,7 @@ Max Concurrent: 5 (Wave 1)
   - Files: `pyproject.toml`
   - Pre-commit: None
 
-- [ ] 6. Extract BaseDocumentHandler ABC
+- [x] 6. Extract BaseDocumentHandler ABC
 
   **What to do**:
   - Create new file `src/office_main/core/base_handler.py` with abstract base class

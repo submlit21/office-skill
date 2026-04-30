@@ -7,10 +7,10 @@ Provides high-level operations for Excel spreadsheet manipulation.
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from .cli_wrapper import LibreOfficeCLI
+from .base_handler import BaseDocumentHandler
 
 
-class XlsxHandler:
+class XlsxHandler(BaseDocumentHandler):
     """Handler for Excel spreadsheet operations."""
 
     def __init__(self, spreadsheet_path: str, project_path: Optional[str] = None):
@@ -22,18 +22,9 @@ class XlsxHandler:
             project_path: Optional path to .lo-cli.json project file.
                          If None, a temporary session file will be created.
         """
+        super().__init__(project_path=project_path)
         self.spreadsheet_path = Path(spreadsheet_path).absolute()
-        self.project_path = project_path
-        self._temp_session = False
-
-        if self.project_path is None:
-            # Create a temporary session file
-            temp_cli = LibreOfficeCLI()
-            self.project_path = temp_cli.start_session(str(self.spreadsheet_path))
-            # Do NOT end session here - keep file for CLI operations
-            self._temp_session = True
-
-        self.cli = LibreOfficeCLI(project_path=self.project_path)
+        self._start_session(str(self.spreadsheet_path))
 
     def get_cell(self, sheet: str, cell_ref: str) -> Dict[str, Any]:
         """
@@ -162,19 +153,6 @@ class XlsxHandler:
         """
         return self.cli.calc("unmerge", positional=[cell_ref], sheet=sheet)
 
-    def export(self, output_path: str, format: str = "pdf") -> Dict[str, Any]:
-        """
-        Export the spreadsheet to another format.
-
-        Args:
-            output_path: Path for the exported file
-            format: Export format (pdf, xlsx, ods, csv, etc.)
-
-        Returns:
-            Command result
-        """
-        return self.cli.export("render", positional=[output_path], preset=format)
-
     def create_from_template(self, template_path: Optional[str] = None) -> "XlsxHandler":
         """
         Create a new spreadsheet from template.
@@ -268,21 +246,3 @@ class XlsxHandler:
                 results.append({"cell": cell, "format": "percentage", "result": result})
 
         return {"applied_formats": results}
-
-    def close(self):
-        """Close the handler and clean up temporary session files."""
-        if self._temp_session and self.project_path:
-            try:
-                import os
-
-                if os.path.exists(self.project_path):
-                    os.unlink(self.project_path)
-            except Exception:
-                pass  # Ignore cleanup errors
-        self.cli.end_session()
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()

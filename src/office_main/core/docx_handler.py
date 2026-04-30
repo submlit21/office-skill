@@ -7,10 +7,10 @@ Provides high-level operations for Word document manipulation.
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from .cli_wrapper import LibreOfficeCLI
+from .base_handler import BaseDocumentHandler
 
 
-class DocxHandler:
+class DocxHandler(BaseDocumentHandler):
     """Handler for Word document operations."""
 
     def __init__(self, document_path: str, project_path: Optional[str] = None):
@@ -22,18 +22,9 @@ class DocxHandler:
             project_path: Optional path to .lo-cli.json project file.
                          If None, a temporary session file will be created.
         """
+        super().__init__(project_path=project_path)
         self.document_path = Path(document_path).absolute()
-        self.project_path = project_path
-        self._temp_session = False
-
-        if self.project_path is None:
-            # Create a temporary session file
-            temp_cli = LibreOfficeCLI()
-            self.project_path = temp_cli.start_session(str(self.document_path))
-            # Do NOT end session here - keep file for CLI operations
-            self._temp_session = True
-
-        self.cli = LibreOfficeCLI(project_path=self.project_path)
+        self._start_session(str(self.document_path))
 
     def add_paragraph(self, text: str, index: Optional[int] = None) -> Dict[str, Any]:
         """
@@ -187,19 +178,6 @@ class DocxHandler:
         """
         return self.cli.writer("list")
 
-    def export(self, output_path: str, format: str = "pdf") -> Dict[str, Any]:
-        """
-        Export the document to another format.
-
-        Args:
-            output_path: Path for the exported file
-            format: Export format (pdf, docx, odt, etc.)
-
-        Returns:
-            Command result
-        """
-        return self.cli.export("render", positional=[output_path], preset=format)
-
     def create_from_template(self, template_path: Optional[str] = None) -> "DocxHandler":
         """
         Create a new document from template.
@@ -240,21 +218,3 @@ class DocxHandler:
             "has_tables": any("table" in str(item).lower() for item in items),
             "has_headings": any("heading" in str(item).lower() for item in items),
         }
-
-    def close(self):
-        """Close the handler and clean up temporary session files."""
-        if self._temp_session and self.project_path:
-            try:
-                import os
-
-                if os.path.exists(self.project_path):
-                    os.unlink(self.project_path)
-            except Exception:
-                pass  # Ignore cleanup errors
-        self.cli.end_session()
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()

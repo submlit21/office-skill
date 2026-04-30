@@ -9,12 +9,14 @@ of Word, Excel, and PowerPoint documents.
 __version__ = "0.1.0"
 __author__ = "Office Skill Team"
 
+from .base_handler import BaseDocumentHandler
 from .cli_wrapper import LibreOfficeCLI
 from .docx_handler import DocxHandler
 from .pptx_handler import PptxHandler
 from .xlsx_handler import XlsxHandler
 
 __all__ = [
+    "BaseDocumentHandler",
     "LibreOfficeCLI",
     "DocxHandler",
     "XlsxHandler",

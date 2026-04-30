@@ -1,0 +1,52 @@
+$ python3 -c "
+from office_main.core import DocxHandler, XlsxHandler, PptxHandler
+from office_main.core.base_handler import BaseDocumentHandler
+
+# Verify ABC is abstract
+import abc
+assert issubclass(BaseDocumentHandler, abc.ABC)
+print('BaseDocumentHandler is an ABC')
+
+# Verify handlers inherit
+assert issubclass(DocxHandler, BaseDocumentHandler)
+assert issubclass(XlsxHandler, BaseDocumentHandler)
+assert issubclass(PptxHandler, BaseDocumentHandler)
+print('All handlers inherit from BaseDocumentHandler')
+
+# Verify shared methods exist on ABC
+assert hasattr(BaseDocumentHandler, 'export')
+assert hasattr(BaseDocumentHandler, 'close')
+assert hasattr(BaseDocumentHandler, 'analyze_structure')
+assert hasattr(BaseDocumentHandler, '__enter__')
+assert hasattr(BaseDocumentHandler, '__exit__')
+print('All shared methods present on ABC')
+
+# Verify handler-specific methods still present
+assert hasattr(DocxHandler, 'add_paragraph')
+assert hasattr(DocxHandler, 'add_heading')
+assert hasattr(DocxHandler, 'add_table')
+assert hasattr(DocxHandler, 'create_from_template')
+print('DocxHandler-specific methods present')
+
+assert hasattr(XlsxHandler, 'get_cell')
+assert hasattr(XlsxHandler, 'set_cell')
+assert hasattr(XlsxHandler, 'list_sheets')
+assert hasattr(XlsxHandler, 'create_from_template')
+print('XlsxHandler-specific methods present')
+
+assert hasattr(PptxHandler, 'add_slide')
+assert hasattr(PptxHandler, 'list_slides')
+assert hasattr(PptxHandler, 'set_content')
+assert hasattr(PptxHandler, 'create_from_template')
+print('PptxHandler-specific methods present')
+
+print('All verifications passed')
+"
+All handlers inherit from BaseDocumentHandler
+BaseDocumentHandler is an ABC
+All handlers inherit from BaseDocumentHandler
+All shared methods present on ABC
+DocxHandler-specific methods present
+XlsxHandler-specific methods present
+PptxHandler-specific methods present
+All verifications passed

@@ -48,6 +48,27 @@
   - No Python source code was modified
 - **Key insight**: Keeping all Python version targets in sync across requires-python, black, ruff, mypy, and classifiers prevents confusion and ensures tools agree on the minimum supported version. When raising the minimum, always update all five locations.
 
+## 2026-04-30: Extracted BaseDocumentHandler ABC from duplicated handler code
+
+- **Problem**: DocxHandler, XlsxHandler, and PptxHandler duplicated ~168 lines of __init__, export(), close(), and context manager code across three nearly-identical implementations
+- **Fix**: Created `src/office_main/core/base_handler.py` with `BaseDocumentHandler(ABC)` containing shared logic
+- **What moved to base**:
+  - `__init__` → base `__init__` + `_start_session()` helper (handles temp session creation + CLI init)
+  - `export()` — identical across all 3 handlers
+  - `close()` — identical across all 3 handlers
+  - `__enter__`/`__exit__` — identical across all 3 handlers
+- **What stayed in handlers**:
+  - Format-specific I/O methods (add_paragraph, set_cell, add_slide, etc.)
+  - `analyze_structure()` — format-specific logic (kept as abstract in base)
+  - `create_from_template()` — different return type annotations per handler (kept as abstract in base)
+- **Deviation from plan**: `close()` was planned as `@abstractmethod` but is concrete in the ABC since all 3 implementations are byte-for-byte identical. Making it concrete eliminates more duplication without behavioral change.
+- **Pattern**: Each handler calls `super().__init__(project_path=project_path)` then `self._start_session(str(self.path_attr))`
+- **Verification**:
+  - `python3 -c "from office_main.core.base_handler import BaseDocumentHandler; ..."` → ABC import OK ✅
+  - `issubclass(DocxHandler, BaseDocumentHandler)` → True for all 3 ✅
+  - LSP diagnostics: 0 errors across the core package ✅
+  - All handler-specific methods still present (add_paragraph, get_cell, list_slides, etc.) ✅
+
 ## 2026-04-30: Improved ruff and mypy configuration
 
 - **Ruff changes**:

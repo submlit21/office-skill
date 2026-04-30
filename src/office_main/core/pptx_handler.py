@@ -7,10 +7,10 @@ Provides high-level operations for PowerPoint presentation manipulation.
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from .cli_wrapper import LibreOfficeCLI
+from .base_handler import BaseDocumentHandler
 
 
-class PptxHandler:
+class PptxHandler(BaseDocumentHandler):
     """Handler for PowerPoint presentation operations."""
 
     def __init__(self, presentation_path: str, project_path: Optional[str] = None):
@@ -22,18 +22,9 @@ class PptxHandler:
             project_path: Optional path to .lo-cli.json project file.
                          If None, a temporary session file will be created.
         """
+        super().__init__(project_path=project_path)
         self.presentation_path = Path(presentation_path).absolute()
-        self.project_path = project_path
-        self._temp_session = False
-
-        if self.project_path is None:
-            # Create a temporary session file
-            temp_cli = LibreOfficeCLI()
-            self.project_path = temp_cli.start_session(str(self.presentation_path))
-            # Do NOT end session here - keep file for CLI operations
-            self._temp_session = True
-
-        self.cli = LibreOfficeCLI(project_path=self.project_path)
+        self._start_session(str(self.presentation_path))
 
     def add_slide(
         self, layout: str = "Title and Content", index: Optional[int] = None
@@ -166,19 +157,6 @@ class PptxHandler:
         """
         return self.cli.impress("get-speaker-notes", positional=[str(slide_index)])
 
-    def export(self, output_path: str, format: str = "pdf") -> Dict[str, Any]:
-        """
-        Export the presentation to another format.
-
-        Args:
-            output_path: Path for the exported file
-            format: Export format (pdf, pptx, odp, etc.)
-
-        Returns:
-            Command result
-        """
-        return self.cli.export("render", positional=[output_path], preset=format)
-
     def create_from_template(self, template_path: Optional[str] = None) -> "PptxHandler":
         """
         Create a new presentation from template.
@@ -265,21 +243,3 @@ class PptxHandler:
             results.append({"slide_index": slide_index, "layout": layout, "results": add_result})
 
         return {"created_slides": results}
-
-    def close(self):
-        """Close the handler and clean up temporary session files."""
-        if self._temp_session and self.project_path:
-            try:
-                import os
-
-                if os.path.exists(self.project_path):
-                    os.unlink(self.project_path)
-            except Exception:
-                pass  # Ignore cleanup errors
-        self.cli.end_session()
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()

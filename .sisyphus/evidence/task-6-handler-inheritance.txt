@@ -1,0 +1,9 @@
+$ python3 -c "
+from office_main.core import DocxHandler, XlsxHandler, PptxHandler
+from office_main.core.base_handler import BaseDocumentHandler
+assert issubclass(DocxHandler, BaseDocumentHandler)
+assert issubclass(XlsxHandler, BaseDocumentHandler)
+assert issubclass(PptxHandler, BaseDocumentHandler)
+print('All handlers inherit from BaseDocumentHandler')
+"
+All handlers inherit from BaseDocumentHandler
