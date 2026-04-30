@@ -110,6 +110,42 @@ class LibreOfficeCLI:
             # Default to writer for unknown types
             return "writer"
 
+    def _run_subcommand(
+        self,
+        command_name: str,
+        subcommand: str,
+        positional: Optional[List[str]] = None,
+        handle_bool_flags: bool = True,
+        **kwargs: Any,
+    ) -> Dict[str, Any]:
+        """Execute a cli-anything-libreoffice subcommand.
+
+        Args:
+            command_name: Top-level command group (e.g., 'writer', 'calc')
+            subcommand: Subcommand within the group (e.g., 'add-paragraph')
+            positional: Optional list of positional arguments
+            handle_bool_flags: Whether to handle boolean kwargs as flags
+                (skip False, bare --flag for True). When False, all values
+                are stringified.
+            **kwargs: Keyword arguments converted to --option values
+
+        Returns:
+            Parsed JSON output or raw output dictionary
+        """
+        if positional is None:
+            positional = []
+        args = [command_name, subcommand]
+        args.extend(positional)
+        for key, value in kwargs.items():
+            if value is not None:
+                option = f"--{key.replace('_', '-')}"
+                if handle_bool_flags and isinstance(value, bool):
+                    if value:
+                        args.append(option)
+                else:
+                    args.extend([option, str(value)])
+        return self._run_command(args)
+
     def start_session(self, document_path: str) -> str:
         """
         Start a new operation log session for tracking document operations.
@@ -171,20 +207,7 @@ class LibreOfficeCLI:
         Returns:
             Parsed JSON output or raw output dictionary
         """
-        if positional is None:
-            positional = []
-        args = ["writer", subcommand]
-        args.extend(positional)
-        for key, value in kwargs.items():
-            if value is not None:
-                option = f"--{key.replace('_', '-')}"
-                if isinstance(value, bool):
-                    # Boolean flags: only include if True
-                    if value:
-                        args.append(option)
-                else:
-                    args.extend([option, str(value)])
-        return self._run_command(args)
+        return self._run_subcommand("writer", subcommand, positional, **kwargs)
 
     def calc(
         self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
@@ -199,20 +222,7 @@ class LibreOfficeCLI:
         Returns:
             Parsed JSON output or raw output dictionary
         """
-        if positional is None:
-            positional = []
-        args = ["calc", subcommand]
-        args.extend(positional)
-        for key, value in kwargs.items():
-            if value is not None:
-                option = f"--{key.replace('_', '-')}"
-                if isinstance(value, bool):
-                    # Boolean flags: only include if True
-                    if value:
-                        args.append(option)
-                else:
-                    args.extend([option, str(value)])
-        return self._run_command(args)
+        return self._run_subcommand("calc", subcommand, positional, **kwargs)
 
     def impress(
         self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
@@ -227,20 +237,7 @@ class LibreOfficeCLI:
         Returns:
             Parsed JSON output or raw output dictionary
         """
-        if positional is None:
-            positional = []
-        args = ["impress", subcommand]
-        args.extend(positional)
-        for key, value in kwargs.items():
-            if value is not None:
-                option = f"--{key.replace('_', '-')}"
-                if isinstance(value, bool):
-                    # Boolean flags: only include if True
-                    if value:
-                        args.append(option)
-                else:
-                    args.extend([option, str(value)])
-        return self._run_command(args)
+        return self._run_subcommand("impress", subcommand, positional, **kwargs)
 
     def export(
         self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
@@ -255,20 +252,7 @@ class LibreOfficeCLI:
         Returns:
             Parsed JSON output or raw output dictionary
         """
-        if positional is None:
-            positional = []
-        args = ["export", subcommand]
-        args.extend(positional)
-        for key, value in kwargs.items():
-            if value is not None:
-                option = f"--{key.replace('_', '-')}"
-                if isinstance(value, bool):
-                    # Boolean flags: only include if True
-                    if value:
-                        args.append(option)
-                else:
-                    args.extend([option, str(value)])
-        return self._run_command(args)
+        return self._run_subcommand("export", subcommand, positional, **kwargs)
 
     def document(
         self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
@@ -283,14 +267,9 @@ class LibreOfficeCLI:
         Returns:
             Parsed JSON output or raw output dictionary
         """
-        if positional is None:
-            positional = []
-        args = ["document", subcommand]
-        args.extend(positional)
-        for key, value in kwargs.items():
-            if value is not None:
-                args.extend([f"--{key.replace('_', '-')}", str(value)])
-        return self._run_command(args)
+        return self._run_subcommand(
+            "document", subcommand, positional, handle_bool_flags=False, **kwargs
+        )
 
     def session(
         self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
@@ -305,14 +284,9 @@ class LibreOfficeCLI:
         Returns:
             Parsed JSON output or raw output dictionary
         """
-        if positional is None:
-            positional = []
-        args = ["session", subcommand]
-        args.extend(positional)
-        for key, value in kwargs.items():
-            if value is not None:
-                args.extend([f"--{key.replace('_', '-')}", str(value)])
-        return self._run_command(args)
+        return self._run_subcommand(
+            "session", subcommand, positional, handle_bool_flags=False, **kwargs
+        )
 
     def style(
         self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
@@ -327,14 +301,9 @@ class LibreOfficeCLI:
         Returns:
             Parsed JSON output or raw output dictionary
         """
-        if positional is None:
-            positional = []
-        args = ["style", subcommand]
-        args.extend(positional)
-        for key, value in kwargs.items():
-            if value is not None:
-                args.extend([f"--{key.replace('_', '-')}", str(value)])
-        return self._run_command(args)
+        return self._run_subcommand(
+            "style", subcommand, positional, handle_bool_flags=False, **kwargs
+        )
 
     def batch(
         self, subcommand: str, positional: Optional[List[str]] = None, **kwargs
@@ -349,14 +318,9 @@ class LibreOfficeCLI:
         Returns:
             Parsed JSON output or raw output dictionary
         """
-        if positional is None:
-            positional = []
-        args = ["batch", subcommand]
-        args.extend(positional)
-        for key, value in kwargs.items():
-            if value is not None:
-                args.extend([f"--{key.replace('_', '-')}", str(value)])
-        return self._run_command(args)
+        return self._run_subcommand(
+            "batch", subcommand, positional, handle_bool_flags=False, **kwargs
+        )
 
     def repl(self):
         """Start interactive REPL session.

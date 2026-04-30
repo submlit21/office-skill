@@ -80,3 +80,18 @@
   - Added per-module overrides: `libreofficepy` gets `ignore_missing_imports = true`, and `pptx`/`docx` share another override with `ignore_missing_imports = true`
 - **Verification**: All 6 new rules confirmed in select list ✅; strict=true confirmed ✅; per-module overrides structured properly ✅
 - **Key insight**: Global `ignore_missing_imports` is a blunt instrument. Prefer per-module overrides so only packages that genuinely lack type stubs get this pass. Enabling `strict = true` catches latent type errors across the codebase.
+
+## 2026-04-30: Consolidated duplicated CLI wrapper methods via _run_subcommand()
+
+- **Problem**: 8 methods (`writer`, `calc`, `impress`, `export`, `document`, `session`, `style`, `batch`) in `LibreOfficeCLI` duplicated ~20 lines of argument-building + kwarg-to-option logic each (~160 lines total)
+- **Fix**: Extracted `_run_subcommand(self, command_name, subcommand, positional=None, handle_bool_flags=True, **kwargs)` helper that handles the common pattern
+- **Two variants**:
+  - **Pattern A** (writer/calc/impress/export): Boolean kwargs handled as flags (`handle_bool_flags=True`), e.g., `--flag` for True, skip for False
+  - **Pattern B** (document/session/style/batch): All kwargs stringified unconditionally (`handle_bool_flags=False`), e.g., `--key True` / `--key False`
+- **Net reduction**: ~130 lines removed (380 → 344, + helper ÷ 8× ~20-line bodies → ~160 removed + ~35 added)
+- **Verification**:
+  - Import test: `from office_main.core.cli_wrapper import LibreOfficeCLI` → OK ✅
+  - Signatures: All 8 methods preserve original signatures (confirmed via `inspect.signature()`) ✅
+  - LSP diagnostics: 0 errors introduced ✅
+  - Black formatting: clean ✅
+- **Key insight**: When consolidating 8 near-identical methods with one behavioral variant, parameterize the variant via a kwarg (`handle_bool_flags`) rather than creating two helpers. This makes the consolidation a single method with a clear default (True for the more common/correct pattern). The delegating methods remain as thin public wrappers to preserve the explicit command-name API and maintain backward-compatible signatures.

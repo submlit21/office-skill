@@ -630,7 +630,7 @@ Max Concurrent: 5 (Wave 1)
   - Files: `src/office_main/core/base_handler.py`, `src/office_main/core/__init__.py`, `src/office_main/core/docx_handler.py`, `src/office_main/core/xlsx_handler.py`, `src/office_main/core/pptx_handler.py`
   - Pre-commit: None
 
-- [ ] 7. Consolidate CLI wrapper duplication
+- [x] 7. Consolidate CLI wrapper duplication
 
   **What to do**:
   - In `src/office_main/core/cli_wrapper.py`, extract helper method `_run_subcommand()`

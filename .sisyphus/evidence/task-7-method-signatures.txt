@@ -1,0 +1,15 @@
+Task 7: Method Signature Verification
+========================================
+All 8 public method signatures unchanged after refactoring.
+
+writer:   (self, subcommand: str, positional: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]
+calc:     (self, subcommand: str, positional: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]
+impress:  (self, subcommand: str, positional: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]
+export:   (self, subcommand: str, positional: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]
+document: (self, subcommand: str, positional: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]
+session:  (self, subcommand: str, positional: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]
+style:    (self, subcommand: str, positional: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]
+batch:    (self, subcommand: str, positional: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]
+
+New helper method:
+_run_subcommand: (self, command_name: str, subcommand: str, positional: Optional[List[str]] = None, handle_bool_flags: bool = True, **kwargs: Any) -> Dict[str, Any]
