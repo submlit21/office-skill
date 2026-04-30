@@ -1,0 +1,18 @@
+Task 5: Ruff select rules added
+
+Changes to pyproject.toml:
+- Added "UP" (pyupgrade) to select list
+- Added "N" (pep8-naming) to select list
+- Added "SIM" (flake8-simplify) to select list
+- Added "PLC" (pylint convention) to select list
+- Added "PLE" (pylint error) to select list
+- Added "RUF100" (ruff unused noqa) to select list
+
+Verification:
+- grep "UP" pyproject.toml returned: "UP",   # pyupgrade ✅
+- grep "N," pyproject.toml returned: "N",    # pep8-naming ✅
+- grep "SIM" pyproject.toml returned: "SIM",  # flake8-simplify ✅
+- grep "PLC" pyproject.toml returned: "PLC",  # pylint convention ✅
+- grep "PLE" pyproject.toml returned: "PLE",  # pylint error ✅
+- grep "RUF100" pyproject.toml returned: "RUF100", # ruff unused noqa ✅
+- All 6 new rules present in [tool.ruff] select list

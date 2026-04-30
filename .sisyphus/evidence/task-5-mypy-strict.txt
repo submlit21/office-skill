@@ -1,0 +1,14 @@
+Task 5: Mypy strict mode and per-module overrides
+
+Changes to pyproject.toml:
+1. Changed strict = false -> strict = true in [tool.mypy]
+2. Removed global ignore_missing_imports = true
+3. Added per-module overrides:
+   - [[tool.mypy.overrides]] for module = ["libreofficepy"] with ignore_missing_imports = true
+   - [[tool.mypy.overrides]] for module = ["pptx", "docx"] with ignore_missing_imports = true
+
+Verification:
+- grep "strict" pyproject.toml returned: strict = true ✅
+- grep -A2 "libreofficepy" pyproject.toml shows proper override section ✅
+- grep -A2 "pptx.*docx" pyproject.toml shows proper override section ✅
+- No global ignore_missing_imports (only per-module now) ✅

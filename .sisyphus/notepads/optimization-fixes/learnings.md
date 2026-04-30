@@ -47,3 +47,15 @@
   - All 5 settings confirmed via `read pyproject.toml` ✅
   - No Python source code was modified
 - **Key insight**: Keeping all Python version targets in sync across requires-python, black, ruff, mypy, and classifiers prevents confusion and ensures tools agree on the minimum supported version. When raising the minimum, always update all five locations.
+
+## 2026-04-30: Improved ruff and mypy configuration
+
+- **Ruff changes**:
+  - Added 6 new rule sets to `select`: `UP` (pyupgrade), `N` (pep8-naming), `SIM` (flake8-simplify), `PLC` (pylint convention), `PLE` (pylint error), `RUF100` (ruff unused noqa)
+  - These rules enforce modern Python idioms, naming conventions, code simplification, and pylint parity
+- **Mypy changes**:
+  - Changed `strict = false` → `strict = true` to enable full type checking
+  - Removed global `ignore_missing_imports = true` (too permissive)
+  - Added per-module overrides: `libreofficepy` gets `ignore_missing_imports = true`, and `pptx`/`docx` share another override with `ignore_missing_imports = true`
+- **Verification**: All 6 new rules confirmed in select list ✅; strict=true confirmed ✅; per-module overrides structured properly ✅
+- **Key insight**: Global `ignore_missing_imports` is a blunt instrument. Prefer per-module overrides so only packages that genuinely lack type stubs get this pass. Enabling `strict = true` catches latent type errors across the codebase.

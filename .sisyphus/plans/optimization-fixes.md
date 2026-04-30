@@ -463,7 +463,7 @@ Max Concurrent: 5 (Wave 1)
   - Files: `pyproject.toml`
   - Pre-commit: None
 
-- [ ] 5. Improve ruff and mypy configuration
+- [x] 5. Improve ruff and mypy configuration
 
   **What to do**:
   - Update `[tool.ruff.lint]` in `pyproject.toml` line 79-81: add `"UP"`, `"N"`, `"SIM"`, `"PLC"`, `"PLE"`, `"RUF100"` to select list
